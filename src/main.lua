@@ -81,10 +81,10 @@ local function on_ready()
         if name == nil then return nil end
 
         if name == 'TrialUpgrade'
-            or name == 'NPC_Arachne_01'
+            -- or name == 'NPC_Arachne_01'
             -- or name == 'NPC_Echo_01'
-            or name == 'NPC_Narcissus_01'
-            or name == 'NPC_Hades_Field_01'
+            -- or name == 'NPC_Narcissus_01'
+            -- or name == 'NPC_Hades_Field_01'
         then
             game.CodexStatus.SelectedChapterName = 'OtherDenizens'
             game.CodexStatus.SelectedEntryNames.OtherDenizens = name
@@ -123,7 +123,7 @@ local function on_ready()
             currentGod = name
             -- get entries here, to be used later
             entries = setCodexVarsReturnEntries(name)
-                if entries ~= nil then
+            if entries ~= nil then
                 table.insert(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, "BoonInfoButton")
                 game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = BoonInfoButton
             end
@@ -162,8 +162,12 @@ local function on_ready()
     modutil.mod.Path.Wrap("CloseUpgradeChoiceScreen", function(base, screen, button)
         -- cleanup the stuff we inserted
         if currentGod ~= nil then
-            table.remove(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, nil)
-        game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = nil
+            for i = 1, #game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder do
+                if game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder[i] == "BoonInfoButton" then
+                    table.remove(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, i)
+                end
+            end
+            game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = nil
         end
         currentGod = nil
         entries = nil
