@@ -60,9 +60,6 @@ local function on_ready()
         TextArgs = game.UIData.ContextualButtonFormatRight,
     }
 
-    table.insert(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, "BoonInfoButton")
-    game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = BoonInfoButton
-
     local CloseButton =
     {
         Graphic = "ContextualActionButton",
@@ -81,35 +78,62 @@ local function on_ready()
     local entries = {}
 
     local function setCodexVarsReturnEntries(name)
-        if name == '' then return nil, nil end
+        if name == nil then return nil end
 
-        if name == 'TrialUpgrade' then
+        if name == 'TrialUpgrade'
+            or name == 'NPC_Arachne_01'
+            -- or name == 'NPC_Echo_01'
+            or name == 'NPC_Narcissus_01'
+            or name == 'NPC_Hades_Field_01'
+        then
             game.CodexStatus.SelectedChapterName = 'OtherDenizens'
-            game.CodexStatus.SelectedEntryNames.OtherDenizens = 'TrialUpgrade'
-            return game.CodexData.OtherDenizens.Entries
+            game.CodexStatus.SelectedEntryNames.OtherDenizens = name
+            return game.CodexOrdering.OtherDenizens
         end
 
-        if name == 'SpellDrop' then
-            game.CodexStatus.SelectedChapterName = 'ChthonicGods'
-            game.CodexStatus.SelectedEntryNames.OtherDenizens = 'SpellDrop'
-            return game.CodexData.ChthonicGods.Entries
+        -- NYI - selene's boon presentation is not in UpgradeChoice
+        -- if name == 'SpellDrop' then
+        --     game.CodexStatus.SelectedChapterName = 'ChthonicGods'
+        --     game.CodexStatus.SelectedEntryNames.OtherDenizens = 'SpellDrop'
+        --     return game.CodexOrdering.ChthonicGods
+        -- end
+
+        if name == "ZeusUpgrade"
+            or name == "HeraUpgrade"
+            or name == "PoseidonUpgrade"
+            or name == "DemeterUpgrade"
+            or name == "ApolloUpgrade"
+            or name == "AphroditeUpgrade"
+            or name == "HephaestusUpgrade"
+            or name == "HestiaUpgrade"
+            or name == "HermesUpgrade"
+            or name == "NPC_Artemis_01" -- need to check?
+        then
+            game.CodexStatus.SelectedChapterName = 'OlympianGods'
+            game.CodexStatus.SelectedEntryNames.OlympianGods = name
+            return game.CodexOrdering.OlympianGods
         end
 
-        game.CodexStatus.SelectedChapterName = 'OlympianGods'
-        game.CodexStatus.SelectedEntryNames.OlympianGods = name
-        return game.CodexData.OlympianGods.Entries
+        return nil
     end
 
-    modutil.mod.Path.Wrap("AttemptOpenCodexBoonInfo", function(base, codexScreen, button)
-        currentGod = nil
-        entries = {}
-
-        local name = codexScreen.SubjectName or ''
-        if name ~= '' then
+    modutil.mod.Path.Wrap("OpenUpgradeChoiceMenu", function(base, source, args)
+        local name = source.Name or nil
+        if name ~= nil then
             currentGod = name
-            -- get entries here, to be used in CodexUpdateVisibility
+            -- get entries here, to be used later
             entries = setCodexVarsReturnEntries(name)
-            -- trickery
+                if entries ~= nil then
+                table.insert(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, "BoonInfoButton")
+                game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = BoonInfoButton
+            end
+        end
+        base(source, args)
+    end)
+
+    modutil.mod.Path.Wrap("AttemptOpenCodexBoonInfo", function(base, codexScreen, button)
+        if entries ~= nil then
+            -- insert some things that need to be cleaned up later
             codexScreen.Components["CloseButton"] = CloseButton
         end
         base(codexScreen, button)
@@ -129,10 +153,22 @@ local function on_ready()
             screen.ActiveEntries = entries
             screen.NumItems = #entries
             screen.ScrollOffset = 0
-            screen.MaxVisibleEntries = 11 -- magic-ish number
+            screen.MaxVisibleEntries = 11 -- magic-ish number (CodexData.lua:45)
             args = { IgnoreArrows = true }
         end
         base(screen, args)
+    end)
+
+    modutil.mod.Path.Wrap("CloseUpgradeChoiceScreen", function(base, screen, button)
+        -- cleanup the stuff we inserted
+        if currentGod ~= nil then
+            table.remove(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, nil)
+        game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = nil
+        end
+        currentGod = nil
+        entries = nil
+
+        base(screen, button)
     end)
 end
 

@@ -6,8 +6,8 @@ schemaVersion = "0.0.1"
 namespace = "Jowday"
 name = "BookDuringBoonSelect"
 versionNumber = "1.0.0"
-description = "Allows you to open the Book of Shadows (Codex) while selecting a boon."
-websiteUrl = "https://github.com/The-Black-Lodge/JowdayBookDuringBoonSelect"
+description = "While selecting a boon, allows you to view that God's offerings page."
+websiteUrl = "https://github.com/The-Black-Lodge/JowdayCodexDuringBoon"
 containsNsfwContent = false
 
 [package.dependencies]
