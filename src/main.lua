@@ -83,27 +83,41 @@ local function on_ready()
 
     local currentGod = nil
 
-    -- skips over chaos/selene
-    local function checkValidGods(name)
-    local validGods = { "ZeusUpgrade", "HeraUpgrade", "PoseidonUpgrade", "DemeterUpgrade", "ApolloUpgrade",
-        "AphroditeUpgrade", "HephaestusUpgrade", "HestiaUpgrade", "HermesUpgrade", "NPC_Artemis_01" }
-            for k, v in pairs(validGods) do
-                if name:match("^" .. v) then
-                    return true
-                end
-            end
-            return false
+    -- TrialUpgrade = chaos
+
+    local function setCodexVarsReturnEntries(name)
+        if name == '' then return nil, nil end
+
+        if name == 'TrialUpgrade' then
+            game.CodexStatus.SelectedChapterName = 'OtherDenizens'
+            game.CodexStatus.SelectedEntryNames.OtherDenizens = 'TrialUpgrade'
+            return game.CodexData.OtherDenizens.Entries
         end
+
+        if name == 'SpellDrop' then
+            game.CodexStatus.SelectedChapterName = 'ChthonicGods'
+            game.CodexStatus.SelectedEntryNames.OtherDenizens = 'SpellDrop'
+            return game.CodexData.ChthonicGods.Entries
+        end
+
+        game.CodexStatus.SelectedChapterName = 'OlympianGods'
+        game.CodexStatus.SelectedEntryNames.OtherDenizens = 'name'
+        return game.CodexData.OlympianGods.Entries
+    end
+    local entries = {}
 
     modutil.mod.Path.Wrap("AttemptOpenCodexBoonInfo", function(base, codexScreen, button)
         currentGod = nil
+
+        local currentEntryName = game.CodexStatus.SelectedEntryNames[game.CodexStatus.SelectedChapterName]
+        print(currentEntryName)
+        local entryData = game.CodexData[game.CodexStatus.SelectedChapterName].Entries[currentEntryName]
+        print(game.TableToJSONString(entryData))
+
         local name = codexScreen.SubjectName or ''
-        print(tostring(checkValidGods(name)))
-        if checkValidGods(codexScreen.SubjectName) == true then
-            print('AttemptOpenCodexBoonInfo: ' .. codexScreen.SubjectName)
-            currentGod = codexScreen.SubjectName
-            game.CodexStatus.SelectedChapterName = 'OlympianGods'
-            game.CodexStatus.SelectedEntryNames.OlympianGods = currentGod
+        if name ~= '' then
+            currentGod = name
+            entries = setCodexVarsReturnEntries(name)
             -- trickery
             codexScreen.Components["CloseButton"] = CloseButton
         end
@@ -123,7 +137,7 @@ local function on_ready()
     modutil.mod.Path.Wrap("CodexUpdateVisibility", function(base, screen, args)
         print(currentGod)
         if currentGod ~= nil then
-            screen.ActiveEntries = game.CodexOrdering.OlympianGods
+            screen.ActiveEntries = entries
             screen.ScrollOffset = 0
             screen.MaxVisibleEntries = 11 -- magic number
             args = { IgnoreArrows = true }
@@ -135,7 +149,6 @@ local function on_ready()
     end)
 
     modutil.mod.Path.Wrap("CloseCodexScreen", function(base, screen, button)
-        
         base(screen, button)
     end)
 end
