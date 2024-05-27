@@ -7,7 +7,7 @@ namespace = "Jowday"
 name = "BookDuringBoonSelect"
 versionNumber = "1.0.0"
 description = "While selecting a boon, allows you to view that God's offerings page."
-websiteUrl = "https://github.com/The-Black-Lodge/JowdayCodexDuringBoon"
+websiteUrl = "https://github.com/The-Black-Lodge/JowdayBookDuringBoonSelect"
 containsNsfwContent = false
 
 [package.dependencies]
