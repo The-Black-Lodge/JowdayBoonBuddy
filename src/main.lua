@@ -49,7 +49,6 @@ local function on_ready()
         },
         Graphic = "ContextualActionButton",
         GroupName = "Combat_Menu_Overlay",
-        --Alpha = 0.0,
         Data =
         {
             OnMouseOverFunctionName = "MouseOverContextualAction",
@@ -67,23 +66,19 @@ local function on_ready()
     local CloseButton =
     {
         Graphic = "ContextualActionButton",
-        GroupName = "Combat_Menu_Overlay",
         Data =
         {
             OnMouseOverFunctionName = "MouseOverContextualAction",
             OnMouseOffFunctionName = "MouseOffContextualAction",
-            --OnPressedFunctionName = {"CloseBoonInfoScreen", "CloseCodexScreen"},
             OnPressedFunctionName = "CloseBoonInfoScreen",
             ControlHotkeys = { "Cancel", },
-            MouseControlHotkeys = { "Cancel", "Codex", }
         },
-        Text = "Menu_Close",
+        Text = "Menu_CloseSubmenu",
         TextArgs = game.UIData.ContextualButtonFormatRight,
     }
 
     local currentGod = nil
-
-    -- TrialUpgrade = chaos
+    local entries = {}
 
     local function setCodexVarsReturnEntries(name)
         if name == '' then return nil, nil end
@@ -101,22 +96,18 @@ local function on_ready()
         end
 
         game.CodexStatus.SelectedChapterName = 'OlympianGods'
-        game.CodexStatus.SelectedEntryNames.OtherDenizens = 'name'
+        game.CodexStatus.SelectedEntryNames.OlympianGods = name
         return game.CodexData.OlympianGods.Entries
     end
-    local entries = {}
 
     modutil.mod.Path.Wrap("AttemptOpenCodexBoonInfo", function(base, codexScreen, button)
         currentGod = nil
-
-        local currentEntryName = game.CodexStatus.SelectedEntryNames[game.CodexStatus.SelectedChapterName]
-        print(currentEntryName)
-        local entryData = game.CodexData[game.CodexStatus.SelectedChapterName].Entries[currentEntryName]
-        print(game.TableToJSONString(entryData))
+        entries = {}
 
         local name = codexScreen.SubjectName or ''
         if name ~= '' then
             currentGod = name
+            -- get entries here, to be used in CodexUpdateVisibility
             entries = setCodexVarsReturnEntries(name)
             -- trickery
             codexScreen.Components["CloseButton"] = CloseButton
@@ -127,7 +118,6 @@ local function on_ready()
     modutil.mod.Path.Wrap("BoonInfoPopulateTraits", function(base, screen)
         if currentGod ~= nil then
             -- more trickery
-            print('BoonInfoPopulateTraits: ' .. currentGod)
             screen.CodexScreen["OpenEntryName"] = currentGod
             screen.LootName = currentGod
         end
@@ -135,21 +125,14 @@ local function on_ready()
     end)
 
     modutil.mod.Path.Wrap("CodexUpdateVisibility", function(base, screen, args)
-        print(currentGod)
         if currentGod ~= nil then
             screen.ActiveEntries = entries
+            screen.NumItems = #entries
             screen.ScrollOffset = 0
-            screen.MaxVisibleEntries = 11 -- magic number
+            screen.MaxVisibleEntries = 11 -- magic-ish number
             args = { IgnoreArrows = true }
         end
-
-        print('CodexUpdateVisibility: ' .. game.TableToJSONString(screen.ActiveEntries))
-
         base(screen, args)
-    end)
-
-    modutil.mod.Path.Wrap("CloseCodexScreen", function(base, screen, button)
-        base(screen, button)
     end)
 end
 
