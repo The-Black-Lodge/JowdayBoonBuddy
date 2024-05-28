@@ -5,7 +5,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "Jowday"
 name = "BookDuringBoonSelect"
-versionNumber = "0.1.2"
+versionNumber = "0.2.0"
 description = "While selecting a boon, allows you to view that God's offerings page. Currently requires the Insight Into Offerings incantation to be unlocked and active."
 websiteUrl = "https://github.com/The-Black-Lodge/JowdayBookDuringBoonSelect"
 containsNsfwContent = false
