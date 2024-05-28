@@ -44,6 +44,11 @@ local function on_ready()
     BoonInfoButton.Text = "Menu_BoonInfo"
     local CloseButton = game.DeepCopyTable(game.ScreenData.BoonInfo.ComponentData.ActionBarRight.Children.CloseButton)
 
+    -- copy over boon button and child order
+    table.insert(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, "BoonInfoButton")
+    game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = game.DeepCopyTable(
+        BoonInfoButton)
+
     local currentGod = nil
     local entries = nil
 
@@ -82,11 +87,10 @@ local function on_ready()
             currentGod = name
             -- get entries here, to be used later
             entries = setCodexVarsReturnEntries(name)
-            if entries ~= nil then
-                table.insert(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, "BoonInfoButton")
-                game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = game.DeepCopyTable(
-                BoonInfoButton)
-            end
+        end
+        if entries ~= nil then
+            -- update the alpha on the boon button
+            game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children.BoonInfoButton["Alpha"] = 1.0
         end
         base(source, args)
     end)
@@ -122,12 +126,7 @@ local function on_ready()
     modutil.mod.Path.Wrap("CloseUpgradeChoiceScreen", function(base, screen, button)
         -- cleanup the stuff we inserted
         if currentGod ~= nil then
-            for i = 1, #game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder do
-                if game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder[i] == "BoonInfoButton" then
-                    table.remove(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, i)
-                end
-            end
-            game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = nil
+            game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children.BoonInfoButton["Alpha"] = 0.0
         end
         currentGod = nil
         entries = nil
