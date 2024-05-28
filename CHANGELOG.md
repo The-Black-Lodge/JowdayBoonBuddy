@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## Fixed
+- rename button to "Boon List" rather than "Offerings"
+- fix bug that prevents the normal codex/book from being closed
+- still working on controller button
+
 ## [0.0.1] - 2024-05-27
 
 ### Added

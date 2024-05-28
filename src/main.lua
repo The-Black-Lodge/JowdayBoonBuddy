@@ -39,64 +39,23 @@ local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
     if config.enabled == false then return end
 
-    local BoonInfoButton =
-    {
-        Requirements =
-        {
-            {
-                PathTrue = { "GameState", "WorldUpgrades", "WorldUpgradeBoonList" },
-            }
-        },
-        Graphic = "ContextualActionButton",
-        GroupName = "Combat_Menu_Overlay",
-        Data =
-        {
-            OnMouseOverFunctionName = "MouseOverContextualAction",
-            OnMouseOffFunctionName = "MouseOffContextualAction",
-            OnPressedFunctionName = "AttemptOpenCodexBoonInfo",
-            ControlHotkeys = { "MenuInfo", },
-        },
-        Text = "Menu_TraitList",
-        TextArgs = game.UIData.ContextualButtonFormatRight,
-    }
-
-    local CloseButton =
-    {
-        Graphic = "ContextualActionButton",
-        Data =
-        {
-            OnMouseOverFunctionName = "MouseOverContextualAction",
-            OnMouseOffFunctionName = "MouseOffContextualAction",
-            OnPressedFunctionName = "CloseBoonInfoScreen",
-            ControlHotkeys = { "Cancel", },
-        },
-        Text = "Menu_CloseSubmenu",
-        TextArgs = game.UIData.ContextualButtonFormatRight,
-    }
+    local BoonInfoButton = game.DeepCopyTable(game.ScreenData.Codex.ComponentData.ActionBar.Children.BoonInfoButton)
+    BoonInfoButton.Alpha = 1.0
+    BoonInfoButton.Text = "Menu_BoonInfo"
+    local CloseButton = game.DeepCopyTable(game.ScreenData.BoonInfo.ComponentData.ActionBarRight.Children.CloseButton)
 
     local currentGod = nil
-    local entries = {}
+    local entries = nil
 
     local function setCodexVarsReturnEntries(name)
         if name == nil then return nil end
 
         if name == 'TrialUpgrade'
-            -- or name == 'NPC_Arachne_01'
-            -- or name == 'NPC_Echo_01'
-            -- or name == 'NPC_Narcissus_01'
-            -- or name == 'NPC_Hades_Field_01'
         then
             game.CodexStatus.SelectedChapterName = 'OtherDenizens'
             game.CodexStatus.SelectedEntryNames.OtherDenizens = name
-            return game.CodexOrdering.OtherDenizens
+            return game.DeepCopyTable(game.CodexOrdering.OtherDenizens)
         end
-
-        -- NYI - selene's boon presentation is not in UpgradeChoice
-        -- if name == 'SpellDrop' then
-        --     game.CodexStatus.SelectedChapterName = 'ChthonicGods'
-        --     game.CodexStatus.SelectedEntryNames.OtherDenizens = 'SpellDrop'
-        --     return game.CodexOrdering.ChthonicGods
-        -- end
 
         if name == "ZeusUpgrade"
             or name == "HeraUpgrade"
@@ -111,7 +70,7 @@ local function on_ready()
         then
             game.CodexStatus.SelectedChapterName = 'OlympianGods'
             game.CodexStatus.SelectedEntryNames.OlympianGods = name
-            return game.CodexOrdering.OlympianGods
+            return game.DeepCopyTable(game.CodexOrdering.OlympianGods)
         end
 
         return nil
@@ -125,7 +84,8 @@ local function on_ready()
             entries = setCodexVarsReturnEntries(name)
             if entries ~= nil then
                 table.insert(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, "BoonInfoButton")
-                game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = BoonInfoButton
+                game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = game.DeepCopyTable(
+                BoonInfoButton)
             end
         end
         base(source, args)
@@ -133,8 +93,8 @@ local function on_ready()
 
     modutil.mod.Path.Wrap("AttemptOpenCodexBoonInfo", function(base, codexScreen, button)
         if entries ~= nil then
-            -- insert some things that need to be cleaned up later
-            codexScreen.Components["CloseButton"] = CloseButton
+            -- copy over the real close button
+            codexScreen.Components["CloseButton"] = game.DeepCopyTable(CloseButton)
         end
         base(codexScreen, button)
     end)
@@ -171,7 +131,6 @@ local function on_ready()
         end
         currentGod = nil
         entries = nil
-
         base(screen, button)
     end)
 end
