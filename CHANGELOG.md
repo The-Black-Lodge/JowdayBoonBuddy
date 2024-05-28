@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## Fixed
+- controller bind should be slightly more reliable
+
 ## [0.1.1] - 2024-05-28
 
 ## Fixed
