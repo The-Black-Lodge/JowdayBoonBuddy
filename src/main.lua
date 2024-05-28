@@ -40,8 +40,13 @@ local function on_ready()
     if config.enabled == false then return end
 
     local BoonInfoButton = game.DeepCopyTable(game.ScreenData.Codex.ComponentData.ActionBar.Children.BoonInfoButton)
+    BoonInfoButton.Data.ControlHotkeys = { "Cancel" }
     BoonInfoButton.Alpha = 1.0
-    BoonInfoButton.Text = "Menu_BoonInfo"
+    BoonInfoButton.Text = "{CN} BOON LIST"
+    if config.AlwaysAllowed == true then
+        BoonInfoButton["Requirements"] = {}
+    end
+
     local CloseButton = game.DeepCopyTable(game.ScreenData.BoonInfo.ComponentData.ActionBarRight.Children.CloseButton)
 
     -- copy over boon button and child order

@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## Fixed
+
+- fixed flaky controller button
+
+## Added
+
+- config option to override boon list requirements
+
 ## [0.1.2] - 2024-05-28
 
 ## Fixed
