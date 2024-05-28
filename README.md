@@ -3,7 +3,7 @@ When accepting a God boon, allows you to view their boon list! Requires the Insi
 
 ## Requirements
 You must already have unlocked the **Insight Into Offerings** Incantation:
-![334210540-25196464-fa1c-4b17-94c5-a78354de16a8](https://github.com/The-Black-Lodge/JowdayBookDuringBoonSelect/assets/7319207/a0569103-3f80-4490-989f-8bc6823443e8)
+![incantation](https://github.com/The-Black-Lodge/JowdayBookDuringBoonSelect/assets/7319207/38b2433d-154a-4d89-8934-c1e2e0d322df)
 This incantation becomes available after gifting each Olympian once.
 
 Once you've unlocked the incantation, you'll see the Boon List button when selecting a God boon.
