@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## Fixed
+- button is localized again
+
 ## [0.2.0] - 2024-05-28
 
 ## Fixed
