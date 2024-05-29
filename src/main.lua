@@ -39,10 +39,14 @@ local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
     if config.enabled == false then return end
 
+    -- preserve localization but update bind
+    local originalText = game.GetDisplayName({ Text = "Menu_BoonInfo" })
+    local boonListText = string.gsub(originalText, "{MX}", "{CN}")
+
     local BoonInfoButton = game.DeepCopyTable(game.ScreenData.Codex.ComponentData.ActionBar.Children.BoonInfoButton)
     BoonInfoButton.Data.ControlHotkeys = { "Cancel" }
     BoonInfoButton.Alpha = 1.0
-    BoonInfoButton.Text = "{CN} BOON LIST"
+    BoonInfoButton.Text = boonListText
     if config.AlwaysAllowed == true then
         BoonInfoButton["Requirements"] = {}
     end
