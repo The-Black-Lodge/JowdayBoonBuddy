@@ -5,7 +5,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "Jowday"
 name = "BookDuringBoonSelect"
-versionNumber = "0.2.0"
+versionNumber = "0.2.1"
 description = "While selecting a boon, allows you to view that God's offerings page."
 websiteUrl = "https://github.com/The-Black-Lodge/JowdayBookDuringBoonSelect"
 containsNsfwContent = false
