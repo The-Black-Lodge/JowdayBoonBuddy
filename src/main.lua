@@ -39,112 +39,15 @@ local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
     if config.enabled == false then return end
 
-    -- preserve localization but update bind
-    local originalText = game.GetDisplayName({ Text = "Menu_BoonInfo" })
-    local boonListText = string.gsub(originalText, "{MX}", "{CN}")
+    currentGod = nil
+    entries = nil
 
-    local BoonInfoButton = game.DeepCopyTable(game.ScreenData.Codex.ComponentData.ActionBar.Children.BoonInfoButton)
-    BoonInfoButton.Data.ControlHotkeys = { "Cancel" }
-    BoonInfoButton.Alpha = 1.0
-    BoonInfoButton.Text = boonListText
-    if config.AlwaysAllowed == true then
-        BoonInfoButton["Requirements"] = {}
-    end
-
-    local CloseButton = game.DeepCopyTable(game.ScreenData.BoonInfo.ComponentData.ActionBarRight.Children.CloseButton)
-
-    -- copy over boon button and child order
-    table.insert(game.ScreenData.UpgradeChoice.ComponentData.ActionBar.ChildrenOrder, "BoonInfoButton")
-    game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children["BoonInfoButton"] = game.DeepCopyTable(
-        BoonInfoButton)
-
-    local currentGod = nil
-    local entries = nil
-
-    local function setCodexVarsReturnEntries(name)
-        if name == nil then return nil end
-
-        if name == 'TrialUpgrade'
-        then
-            game.CodexStatus.SelectedChapterName = 'OtherDenizens'
-            game.CodexStatus.SelectedEntryNames.OtherDenizens = name
-            return game.DeepCopyTable(game.CodexOrdering.OtherDenizens)
-        end
-
-        if name == "ZeusUpgrade"
-            or name == "HeraUpgrade"
-            or name == "PoseidonUpgrade"
-            or name == "DemeterUpgrade"
-            or name == "ApolloUpgrade"
-            or name == "AphroditeUpgrade"
-            or name == "HephaestusUpgrade"
-            or name == "HestiaUpgrade"
-            or name == "HermesUpgrade"
-            or name == "NPC_Artemis_01" -- need to check?
-        then
-            game.CodexStatus.SelectedChapterName = 'OlympianGods'
-            game.CodexStatus.SelectedEntryNames.OlympianGods = name
-            return game.DeepCopyTable(game.CodexOrdering.OlympianGods)
-        end
-
-        return nil
-    end
-
-    modutil.mod.Path.Wrap("OpenUpgradeChoiceMenu", function(base, source, args)
-        local name = source.Name or nil
-        if name ~= nil then
-            currentGod = name
-            -- get entries here, to be used later
-            entries = setCodexVarsReturnEntries(name)
-        end
-        if entries ~= nil then
-            -- update the alpha on the boon button
-            game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children.BoonInfoButton["Alpha"] = 1.0
-        end
-        base(source, args)
-    end)
-
-    modutil.mod.Path.Wrap("AttemptOpenCodexBoonInfo", function(base, codexScreen, button)
-        if entries ~= nil then
-            -- copy over the real close button
-            codexScreen.Components["CloseButton"] = game.DeepCopyTable(CloseButton)
-        end
-        base(codexScreen, button)
-    end)
-
-    modutil.mod.Path.Wrap("BoonInfoPopulateTraits", function(base, screen)
-        if currentGod ~= nil then
-            -- more trickery
-            screen.CodexScreen["OpenEntryName"] = currentGod
-            screen.LootName = currentGod
-        end
-        base(screen)
-    end)
-
-    modutil.mod.Path.Wrap("CodexUpdateVisibility", function(base, screen, args)
-        if currentGod ~= nil then
-            screen.ActiveEntries = entries
-            screen.NumItems = #entries
-            screen.ScrollOffset = 0
-            screen.MaxVisibleEntries = 11 -- magic-ish number (CodexData.lua:45)
-            args = { IgnoreArrows = true }
-        end
-        base(screen, args)
-    end)
-
-    modutil.mod.Path.Wrap("CloseUpgradeChoiceScreen", function(base, screen, button)
-        -- cleanup the stuff we inserted
-        if currentGod ~= nil then
-            game.ScreenData.UpgradeChoice.ComponentData.ActionBar.Children.BoonInfoButton["Alpha"] = 0.0
-        end
-        currentGod = nil
-        entries = nil
-        base(screen, button)
-    end)
+    import 'ui.lua'
+    import 'wrap.lua'
 end
 
 local function on_reload()
-
+    import 'func.lua'
 end
 
 -- this allows us to limit certain functions to not be reloaded.
