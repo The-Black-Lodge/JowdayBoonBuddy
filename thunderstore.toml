@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 
 [package]
 namespace = "Jowday"
-name = "BoonBuddy"
+name = "BookDuringBoonSelect"
 versionNumber = "0.2.1"
 description = "RENAMED/DEPRECATED! Please uninstall this mod and install Boon Buddy instead."
 websiteUrl = "https://github.com/The-Black-Lodge/JowdayBoonBuddy"
