@@ -6,7 +6,7 @@ schemaVersion = "0.0.1"
 namespace = "Jowday"
 name = "BoonBuddy"
 versionNumber = "0.2.1"
-description = "DEPRECATED! Please uninstall this mod and install Boon Buddy instead."
+description = "RENAMED/DEPRECATED! Please uninstall this mod and install Boon Buddy instead."
 websiteUrl = "https://github.com/The-Black-Lodge/JowdayBoonBuddy"
 containsNsfwContent = false
 
