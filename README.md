@@ -1,4 +1,8 @@
-# Book During Boon Select
+# This mod has been renamed!
+## Please uninstall this mod and install the updated version, Boon Buddy.
+https://thunderstore.io/c/hades-ii/p/Jowday/BoonBuddy/
+
+---
 
 When accepting a God boon, allows you to view their boon list!
 
