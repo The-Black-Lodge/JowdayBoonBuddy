@@ -4,9 +4,9 @@ schemaVersion = "0.0.1"
 
 [package]
 namespace = "Jowday"
-name = "BookDuringBoonSelect"
+name = "BoonBuddy"
 versionNumber = "0.2.1"
-description = "RENAMED/DEPRECATED! Please uninstall this mod and install Boon Buddy instead."
+description = "View the boon list when picking up boons, and marks boons that were banned by Vow of Forsaking."
 websiteUrl = "https://github.com/The-Black-Lodge/JowdayBoonBuddy"
 containsNsfwContent = false
 

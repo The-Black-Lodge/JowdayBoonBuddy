@@ -1,6 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+## Changed
+- renamed from BookDuringBoonSelect
+
+## Added
+- boons that are banned by Vow of Forsaking are differentiated in the Book of Shadows
 
 ## [0.2.1] - 2024-05-29
 
