@@ -1,12 +1,12 @@
-# This mod has been renamed!
-## Please uninstall this mod and install the updated version, Boon Buddy.
-https://thunderstore.io/c/hades-ii/p/Jowday/BoonBuddy/
+# Boon Buddy
+The mod formerly known as _BookDuringBoonSelect_ (not a very good name).
 
----
-
-When accepting a God boon, allows you to view their boon list!
-
+## Features
+When accepting a God boon, allows you to view that God's boon list!
 ![Screenshot 2024-05-27 215412](https://github.com/The-Black-Lodge/JowdayBookDuringBoonSelect/assets/7319207/48a41273-4565-4e48-a541-1078e8141a30)
+
+When viewing the boon list, boons that have been banned by the Vow of Forsaking will have red text.
+![BanDisplay](https://github.com/The-Black-Lodge/JowdayBoonBuddy/assets/7319207/e498c3b2-1e70-41b1-aee1-cbbe273eb0c5)
 
 ## Configuration Options
 
