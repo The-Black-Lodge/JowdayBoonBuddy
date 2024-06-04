@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+## Changed
+- removed button, as native button has been added
 
 ## [0.3.1] - 2024-06-03
 

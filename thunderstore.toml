@@ -6,7 +6,7 @@ schemaVersion = "0.0.1"
 namespace = "Jowday"
 name = "BoonBuddy"
 versionNumber = "0.3.1"
-description = "View the boon list when picking up boons, and marks boons that were banned by Vow of Forsaking."
+description = "Marks boons that were banned by Vow of Forsaking. Disables requirements for the Offerings button in the boon selection screen."
 websiteUrl = "https://github.com/The-Black-Lodge/JowdayBoonBuddy"
 containsNsfwContent = false
 
