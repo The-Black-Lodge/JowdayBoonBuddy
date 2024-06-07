@@ -6,7 +6,7 @@ schemaVersion = "0.0.1"
 namespace = "Jowday"
 name = "BoonBuddy"
 versionNumber = "0.4.0"
-description = "Marks boons that were banned by Vow of Forsaking. Disables requirements for the Offerings button in the boon selection screen."
+description = "Fully customizable boon rarity! Marks boons that were banned by Vow of Forsaking. Disables requirements for the Offerings button in the boon selection screen."
 websiteUrl = "https://github.com/The-Black-Lodge/JowdayBoonBuddy"
 containsNsfwContent = false
 
@@ -15,7 +15,6 @@ SGG_Modding-ENVY = "1.0.0"
 SGG_Modding-Chalk = "2.0.2"
 SGG_Modding-ReLoad = "1.0.1"
 SGG_Modding-ModUtil = "3.1.1"
-
 
 [build]
 icon = "./icon.png"

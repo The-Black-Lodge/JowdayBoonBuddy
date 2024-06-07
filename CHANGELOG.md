@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+## Added
+- rarity gui
+  - update base spawn rates for all rarities!
 
 ## [0.4.0] - 2024-06-04
 

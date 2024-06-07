@@ -60,5 +60,5 @@ modutil.once_loaded.game(function()
 end)
 
 modutil.once_loaded.save(function()
-    adjustRarityRolls()
+    adjustRarityValues()
 end)

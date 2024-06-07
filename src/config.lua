@@ -10,7 +10,9 @@ return {
     EpicChance = 5,
     HeroicChance = 0,
     LegendaryChance = 10,
-  DuoChance = 12
+    DuoChance = 12,
+    ReplaceChance = 10,
+  HermesRarity = false
 }, {
     AlwaysAllowed = "Ignore all requirements (Book of Shadows, Insight Into Offerings)",
     MinimumRarity = "Boons will be at least this rarity. Possible values: 0 (Default), 1 (Rare), 2 (Epic), 3 (Heroic)",
@@ -20,4 +22,6 @@ return {
     RareChance = "% Chance of Rare boon. Default: 10",
     EpicChance = "% Chance of Epic boon. Default: 5",
     HeroicChance = "% Chance of Heroic boon. Default: 0",
+    ReplaceChance = "% Chance of boon replacement. Default: 10",
+    HermesRarity = "Apply rarity chances to Hermes boons. Default: false"
   }
