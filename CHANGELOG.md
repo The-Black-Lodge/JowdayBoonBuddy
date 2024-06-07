@@ -1,7 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.5.0] - 2024-06-07
+
 ## Added
+
 - rarity gui
   - update base spawn rates for all rarities!
 
@@ -65,7 +69,8 @@
 
 - When accepting a God boon, allows you to view the Book of Shadows entry. Requires the Insight into Offerings incantation to be unlocked.
 
-[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.4.0...HEAD
+[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.5.0...HEAD
+[0.5.0]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.3.1...0.4.0
 [0.3.1]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.2.2...0.3.0
