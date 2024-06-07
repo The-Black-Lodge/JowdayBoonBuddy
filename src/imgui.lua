@@ -3,14 +3,15 @@
 
 rom.gui.add_to_menu_bar(function()
     if rom.ImGui.BeginMenu("Configure") then
-        -- implement later
-        -- value, checked = rom.ImGui.Checkbox("Always allow Book of Shadows during boon selection",
-        --     config.AlwaysAllowed)
-        -- if checked then
-        --     config.AlwaysAllowed = value
-        -- end
 
-        -- rom.ImGui.Separator()
+        value, checked = rom.ImGui.Checkbox("Always allow Book of Shadows during boon selection",
+            config.AlwaysAllowed)
+        if checked then
+            config.AlwaysAllowed = value
+            updateBoonListRequirements()
+        end
+
+        rom.ImGui.Separator()
 
         rom.ImGui.Text("Minimum boon rarity:")
 

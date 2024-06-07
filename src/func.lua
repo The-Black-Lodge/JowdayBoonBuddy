@@ -1,6 +1,13 @@
 ---@meta _
 ---@diagnostic disable
 
+function setBannedProps(textArgs)
+    textArgs.Color = game.Color.DarkRed
+    textArgs.ShadowBlur = 0
+    textArgs.ShadowColor = game.Color.Black
+    textArgs.ShadowOffset = { 0, 1 }
+end
+
 function isTraitBanned(traitName)
     for k, v in pairs(game.CurrentRun.BannedTraits) do
         if traitName:match(k) then
@@ -50,7 +57,7 @@ function adjustRarityValues()
         replace = math.min(config.ReplaceChance / 100, 1)
     else
         replace = 10
-     end
+    end
 
     -- apply MinimumRarity overrides
     local hermes = config.HermesRarity
@@ -91,5 +98,11 @@ function adjustRarityValues()
     end
 end
 
--- RoomLogic.IsRarityForcedCommon, GetRarityChances
--- CurrentRun.CurrentRoom.BoonRaritiesOverride
+-- UpgradeChoiceData:340
+function updateBoonListRequirements()
+    if config.AlwaysAllowed == true then
+        game.ScreenData.UpgradeChoice.ComponentData.ActionBarLeft.Children.BoonListButton["Requirements"] = {}
+    else
+        game.ScreenData.UpgradeChoice.ComponentData.ActionBarLeft.Children.BoonListButton["Requirements"] = {{PathTrue = { "GameState", "WorldUpgrades", "WorldUpgradeBoonList" }}}
+    end
+end

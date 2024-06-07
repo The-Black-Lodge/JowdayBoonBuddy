@@ -39,10 +39,6 @@ local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
     if config.enabled == false then return end
 
-    currentGod = nil
-    entries = nil
-
-    import 'ui.lua'
     import 'wrap.lua'
 end
 
@@ -61,4 +57,5 @@ end)
 
 modutil.once_loaded.save(function()
     adjustRarityValues()
+    updateBoonListRequirements()
 end)
