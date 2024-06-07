@@ -48,6 +48,7 @@ end
 
 local function on_reload()
     import 'func.lua'
+    import 'imgui.lua'
 end
 
 -- this allows us to limit certain functions to not be reloaded.
@@ -56,4 +57,8 @@ local loader = reload.auto_single()
 -- this runs only when modutil and the game's lua is ready
 modutil.once_loaded.game(function()
     loader.load(on_ready, on_reload)
+end)
+
+modutil.once_loaded.save(function()
+    adjustRarityRolls()
 end)

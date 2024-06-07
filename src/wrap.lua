@@ -27,7 +27,7 @@ modutil.mod.Path.Context.Wrap("CreateBoonInfoButton", function(screen, traitName
 
     modutil.mod.Path.Wrap("BoonInfoScreenUpdateTooltipToggle", function(base, screen, button)
         if isTraitBanned(button.TraitData.Name) then
-            game.SetAlpha({Id = button.Id, Duration = 0.1, Fraction = 0.5})
+            game.SetAlpha({ Id = button.Id, Duration = 0.1, Fraction = 0.5 })
 
             -- figure out strikethrough effect some other time
             -- local strike = game.CreateScreenComponent({ Name = "rectangle01", X = button.X, Y = button.Y })
