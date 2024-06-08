@@ -134,4 +134,39 @@ function drawMenu()
         config.HermesRarity = false
         adjustRarityValues()
     end
+
+    rom.ImGui.Separator()
+
+    rom.ImGui.Text("Infusions:")
+    value, checked = rom.ImGui.Checkbox("Only offer Infusions when activation requirements are met",
+        config.InfusionWhenRequirementsMet)
+    if checked then
+        config.InfusionWhenRequirementsMet = value
+        if value == true then
+            config.InfusionOverride = true
+            overrideInfusionGameStateRequirements()
+        else
+            revertInfusionGameStateRequirements()
+        end
+    end
+
+    value, checked = rom.ImGui.Checkbox("Customize Infusion chance",
+        config.InfusionOverride)
+    if checked then
+        config.InfusionOverride = value
+        if value == false then
+            config.InfusionWhenRequirementsMet = false
+            revertInfusionGameStateRequirements()
+        end
+    end
+
+    if config.InfusionOverride == true then
+        rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 1, 0.29, 1, 1)
+        value, selected = rom.ImGui.SliderInt("% Infusion", config.InfusionChance, 0, 100)
+        if selected then
+            config.InfusionChance = value
+            adjustRarityValues()
+        end
+        rom.ImGui.PopStyleColor()
+    end
 end

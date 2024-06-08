@@ -35,6 +35,8 @@ config = chalk.auto()
 -- ^ this updates our config.toml in the config folder!
 public.config = config -- so other mods can access our config
 
+InfusionGameStateRequirements = {}
+
 local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
     if config.enabled == false then return end
@@ -58,4 +60,5 @@ end)
 modutil.once_loaded.save(function()
     adjustRarityValues()
     updateBoonListRequirements()
+    getInfusionGameStateRequirements()
 end)

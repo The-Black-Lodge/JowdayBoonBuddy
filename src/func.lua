@@ -9,12 +9,73 @@ function setBannedProps(textArgs)
 end
 
 function isTraitBanned(traitName)
-    for k, v in pairs(game.CurrentRun.BannedTraits) do
-        if traitName:match(k) then
-            return true
+    if game.CurrentRun.BannedTraits[traitName] then return true end
+    return false
+end
+
+function getInfusionGameStateRequirements()
+    for traitName, vals in pairs(game.TraitData) do
+        if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
+            InfusionGameStateRequirements[traitName] = game.DeepCopyTable(vals.GameStateRequirements)
         end
     end
-    return false
+
+    if config.InfusionWhenRequirementsMet == true then
+        overrideInfusionGameStateRequirements()
+    end
+end
+
+function overrideInfusionGameStateRequirements()
+    for traitName, vals in pairs(game.TraitData) do
+        if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
+            game.TraitData[traitName].GameStateRequirements = game.DeepCopyTable(vals.ActivationRequirements)
+        end
+    end
+end
+
+function revertInfusionGameStateRequirements()
+    for traitName, vals in pairs(game.TraitData) do
+        if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
+            game.TraitData[traitName].GameStateRequirements = game.DeepCopyTable(InfusionGameStateRequirements
+            [traitName])
+        end
+    end
+end
+
+function getEligibleElementalTrait(traits, options)
+    -- pretty sure options can never be nil, but just in case
+    if traits == nil or options == nil then return nil end
+
+    -- check for an elemental trait
+    local elementalTrait = nil
+    for _, traitName in ipairs(traits) do
+        if game.TraitData[traitName].IsElementalTrait then
+            elementalTrait = traitName
+        end
+    end
+
+    -- did we find anything?
+    if elementalTrait == nil then return nil end
+
+    -- check if we have it already
+    if game.HeroHasTrait(elementalTrait) then return nil end
+
+    -- check if it was banned
+    if isTraitBanned(elementalTrait) then return nil end
+
+    -- check for elemental requirement
+    local requirements = game.TraitData[elementalTrait].GameStateRequirements
+    local eligible = game.IsGameStateEligible(game.CurrentRun, requirements)
+    if eligible == false then return nil end
+
+    -- check that it isn't already being offered
+    local offered = false
+    for _, trait in ipairs(options) do
+        if trait.ItemName == elementalTrait then offered = true end
+    end
+    if offered == true then return end
+
+    return elementalTrait
 end
 
 function adjustRarityValues()
@@ -103,6 +164,6 @@ function updateBoonListRequirements()
     if config.AlwaysAllowed == true then
         game.ScreenData.UpgradeChoice.ComponentData.ActionBarLeft.Children.BoonListButton["Requirements"] = {}
     else
-        game.ScreenData.UpgradeChoice.ComponentData.ActionBarLeft.Children.BoonListButton["Requirements"] = {{PathTrue = { "GameState", "WorldUpgrades", "WorldUpgradeBoonList" }}}
+        game.ScreenData.UpgradeChoice.ComponentData.ActionBarLeft.Children.BoonListButton["Requirements"] = { { PathTrue = { "GameState", "WorldUpgrades", "WorldUpgradeBoonList" } } }
     end
 end

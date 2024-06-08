@@ -38,3 +38,20 @@ modutil.mod.Path.Context.Wrap("CreateBoonInfoButton", function(screen, traitName
         base(screen, button)
     end)
 end)
+
+modutil.mod.Path.Wrap("UseLoot", function(base, usee, args, user)
+    print(#usee.UpgradeOptions)
+    if config.InfusionOverride == true then
+        local elementalTrait = getEligibleElementalTrait(usee.Traits, usee.UpgradeOptions)
+        -- if we got something back, check if we should replace one of the offered boons
+        if elementalTrait ~= nil then
+            math.randomseed(game.GetTime())
+            local random = math.random(100)
+            if config.InfusionChance > random then
+                local replaceTrait = math.random(#usee.UpgradeOptions)
+                usee.UpgradeOptions[replaceTrait] = { ItemName = elementalTrait, Type = "Trait", Rarity = "Common" }
+            end
+        end
+    end
+    base(usee, args, user)
+end)

@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+## Added
+- infusion options!
+  - option to only offer infusions when they will be active
+  - adjust spawn chance
+- persistent window option
+  - available in Hell2Modding -> Windows
 
 ## [0.5.0] - 2024-06-07
 
