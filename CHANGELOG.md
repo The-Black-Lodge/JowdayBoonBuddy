@@ -1,7 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.6.2] - 2024-06-08
+
 ## Fixed
+
 - fixed crash when picking up poms
 
 ## [0.6.1] - 2024-06-08
@@ -81,7 +85,8 @@
 
 - When accepting a God boon, allows you to view the Book of Shadows entry. Requires the Insight into Offerings incantation to be unlocked.
 
-[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.1...HEAD
+[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.2...HEAD
+[0.6.2]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.5.0...0.6.1
 [0.5.0]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.3.1...0.4.0
