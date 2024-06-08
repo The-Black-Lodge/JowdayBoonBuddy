@@ -40,7 +40,6 @@ modutil.mod.Path.Context.Wrap("CreateBoonInfoButton", function(screen, traitName
 end)
 
 modutil.mod.Path.Wrap("UseLoot", function(base, usee, args, user)
-    print(#usee.UpgradeOptions)
     if config.InfusionOverride == true then
         local elementalTrait = getEligibleElementalTrait(usee.Traits, usee.UpgradeOptions)
         -- if we got something back, check if we should replace one of the offered boons
