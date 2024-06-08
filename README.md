@@ -18,5 +18,7 @@ This mod disables the requirements for the **Offerings** button by default.
 `Mods -> Jowday-BoonBuddy -> Configure` \
 ![image](https://github.com/The-Black-Lodge/JowdayBoonBuddy/assets/7319207/42971050-5b9f-4595-a3b5-d2020dbfab58)
 
-**OR** `Windows -> Jowday-BoonBuddy` \
+**OR** 
+
+`Windows -> Jowday-BoonBuddy` \
 ![image](https://github.com/The-Black-Lodge/JowdayBoonBuddy/assets/7319207/b6ef598e-d062-470a-884e-ea0f2ce7ab33)
