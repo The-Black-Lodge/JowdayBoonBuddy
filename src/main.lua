@@ -35,16 +35,21 @@ config = chalk.auto()
 -- ^ this updates our config.toml in the config folder!
 public.config = config -- so other mods can access our config
 
-InfusionGameStateRequirements = {}
-
 local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
     if config.enabled == false then return end
+
+    DefaultInfusionGameStateRequirements = {}
+    DefaultBoonRarity = {}
+    DefaultHermesRarity = {}
+    DefaultReplaceChance = 0.1
 
     import 'wrap.lua'
 end
 
 local function on_reload()
+    if config.enabled == false then return end
+
     import 'func.lua'
     import 'imgui.lua'
 end
@@ -58,7 +63,12 @@ modutil.once_loaded.game(function()
 end)
 
 modutil.once_loaded.save(function()
+    if config.enabled == false then return end
+
+    getDefaults()
     adjustRarityValues()
     updateBoonListRequirements()
-    getInfusionGameStateRequirements()
+    if config.InfusionOverride == true then
+        overrideInfusionGameStateRequirements()
+    end
 end)

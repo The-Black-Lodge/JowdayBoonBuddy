@@ -125,12 +125,12 @@ function drawMenu()
     reset = rom.ImGui.Button("Reset rarity")
     if reset then
         config.MinimumRarity = 0
-        config.RareChance = 10
-        config.EpicChance = 5
+        config.RareChance = DefaultBoonRarity.Rare * 100
+        config.EpicChance = DefaultBoonRarity.Epic * 100
         config.HeroicChance = 0
-        config.LegendaryChance = 10
-        config.DuoChance = 12
-        config.ReplaceChance = 10
+        config.LegendaryChance = DefaultBoonRarity.Legendary * 100
+        config.DuoChance = DefaultBoonRarity.Duo * 100
+        config.ReplaceChance = DefaultReplaceChance * 100
         config.HermesRarity = false
         adjustRarityValues()
     end

@@ -54,3 +54,10 @@ modutil.mod.Path.Wrap("UseLoot", function(base, usee, args, user)
     end
     base(usee, args, user)
 end)
+
+-- prevent changes from tainting save data
+modutil.mod.Path.Wrap("SaveCheckpoint", function(base, args)
+    revertDefaultRarity()
+    base(args)
+    adjustRarityValues()
+end)

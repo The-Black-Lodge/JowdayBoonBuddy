@@ -1,28 +1,16 @@
 ---@meta _
 ---@diagnostic disable
 
-function setBannedProps(textArgs)
-    textArgs.Color = game.Color.DarkRed
-    textArgs.ShadowBlur = 0
-    textArgs.ShadowColor = game.Color.Black
-    textArgs.ShadowOffset = { 0, 1 }
-end
-
-function isTraitBanned(traitName)
-    if game.CurrentRun.BannedTraits[traitName] then return true end
-    return false
-end
-
-function getInfusionGameStateRequirements()
+function getDefaults()
     for traitName, vals in pairs(game.TraitData) do
         if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
-            InfusionGameStateRequirements[traitName] = game.DeepCopyTable(vals.GameStateRequirements)
+            DefaultInfusionGameStateRequirements[traitName] = game.DeepCopyTable(vals.GameStateRequirements)
         end
     end
 
-    if config.InfusionWhenRequirementsMet == true then
-        overrideInfusionGameStateRequirements()
-    end
+    DefaultBoonRarity = game.HeroData.BoonData.RarityChances
+    DefaultHermesRarity = game.HeroData.HermesData.RarityChances
+    DefaultReplaceChance = game.HeroData.BoonData.ReplaceChance
 end
 
 function overrideInfusionGameStateRequirements()
@@ -36,8 +24,8 @@ end
 function revertInfusionGameStateRequirements()
     for traitName, vals in pairs(game.TraitData) do
         if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
-            game.TraitData[traitName].GameStateRequirements = game.DeepCopyTable(InfusionGameStateRequirements
-            [traitName])
+            game.TraitData[traitName].GameStateRequirements = game.DeepCopyTable(DefaultInfusionGameStateRequirements
+                [traitName])
         end
     end
 end
@@ -79,8 +67,14 @@ function getEligibleElementalTrait(traits, options)
 end
 
 function adjustRarityValues()
+    -- adds Heroic to the rolls
     game.TraitRarityData.BoonRarityRollOrder = { "Common", "Rare", "Epic", "Heroic", "Duo", "Legendary" }
     game.TraitRarityData.BoonRarityReverseRollOrder = { "Legendary", "Duo", "Heroic", "Epic", "Rare", "Common" }
+
+    -- removes the 2 min completed runs thing
+    if config.NewSaveOverride then
+        -- not doing anything just yet...
+    end
 
     -- make sure everything is a number
     local min, rare, epic, heroic, duo, legendary, replace
@@ -92,12 +86,12 @@ function adjustRarityValues()
     if type(config.RareChance) == 'number' then
         rare = math.min(config.RareChance / 100, 1)
     else
-        rare = 10
+        rare = DefaultBoonRarity.Rare * 100
     end
     if type(config.EpicChance) == 'number' then
         epic = math.min(config.EpicChance / 100, 1)
     else
-        epic = 5
+        epic = DefaultBoonRarity.Epic * 100
     end
     if type(config.HeroicChance) == 'number' then
         heroic = math.min(config.HeroicChance / 100, 1)
@@ -107,17 +101,17 @@ function adjustRarityValues()
     if type(config.DuoChance) == 'number' then
         duo = math.min(config.DuoChance / 100, 1)
     else
-        duo = 12
+        duo = DefaultBoonRarity.Duo * 100
     end
     if type(config.LegendaryChance) == 'number' then
         legendary = math.min(config.LegendaryChance / 100, 1)
     else
-        legendary = 10
+        legendary = DefaultBoonRarity.Legendary * 100
     end
     if type(config.ReplaceChance) == 'number' then
         replace = math.min(config.ReplaceChance / 100, 1)
     else
-        replace = 10
+        replace = DefaultReplaceChance * 100
     end
 
     -- apply MinimumRarity overrides
@@ -152,13 +146,32 @@ function adjustRarityValues()
 
     -- if hermes is unchecked, reset all the things
     if hermes == false then
-        game.CurrentRun.Hero.HermesData.RarityChances.Rare = 0.06
-        game.CurrentRun.Hero.HermesData.RarityChances.Epic = 0.03
+        game.CurrentRun.Hero.HermesData.RarityChances.Rare = DefaultHermesRarity.Rare
+        game.CurrentRun.Hero.HermesData.RarityChances.Epic = DefaultHermesRarity.Epic
         game.CurrentRun.Hero.HermesData.RarityChances.Heroic = 0
-        game.CurrentRun.Hero.HermesData.RarityChances.Legendary = 0.01
+        game.CurrentRun.Hero.HermesData.RarityChances.Legendary = DefaultHermesRarity.Legendary
     end
 end
 
+function revertDefaultRarity()
+    game.CurrentRun.Hero.BoonData = game.DeepCopyTable(game.HeroData.BoonData)
+    game.CurrentRun.Hero.HermesData = game.DeepCopyTable(game.HeroData.HermesData)
+end
+
+-- vow of forsaking functions
+function setBannedProps(textArgs)
+    textArgs.Color = game.Color.DarkRed
+    textArgs.ShadowBlur = 0
+    textArgs.ShadowColor = game.Color.Black
+    textArgs.ShadowOffset = { 0, 1 }
+end
+
+function isTraitBanned(traitName)
+    if game.CurrentRun.BannedTraits[traitName] then return true end
+    return false
+end
+
+-- offerings button override functions
 -- UpgradeChoiceData:340
 function updateBoonListRequirements()
     if config.AlwaysAllowed == true then
