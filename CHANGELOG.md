@@ -1,6 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+## Added
+- override forced common loot in fresh save files
+
+## Changed
+- modified rarities should no longer sneak into your save game
 
 ## [0.6.3] - 2024-06-09
 

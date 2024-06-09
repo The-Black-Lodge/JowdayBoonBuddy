@@ -61,3 +61,12 @@ modutil.mod.Path.Wrap("SaveCheckpoint", function(base, args)
     base(args)
     adjustRarityValues()
 end)
+
+modutil.mod.Path.Wrap("IsRarityForcedCommon", function(base, name, args)
+    local forced = base(name, args)
+        -- override new save thing
+    if config.NewSaveOverride == true and game.CurrentRun.CurrentRoom.ForceCommonLootFirstRun then
+        return false
+    end
+    return forced
+end)

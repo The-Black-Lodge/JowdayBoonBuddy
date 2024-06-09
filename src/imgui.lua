@@ -122,6 +122,13 @@ function drawMenu()
         adjustRarityValues()
     end
 
+    value, checked = rom.ImGui.Checkbox("Allow increased rarity on new saves",
+    config.NewSaveOverride)
+    if checked then
+        config.NewSaveOverride = value
+        adjustRarityValues()
+    end
+
     reset = rom.ImGui.Button("Reset rarity")
     if reset then
         config.MinimumRarity = 0
@@ -132,6 +139,7 @@ function drawMenu()
         config.DuoChance = DefaultBoonRarity.Duo * 100
         config.ReplaceChance = DefaultReplaceChance * 100
         config.HermesRarity = false
+        config.NewSaveOverride = false
         adjustRarityValues()
     end
 

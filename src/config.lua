@@ -15,7 +15,7 @@ return {
   InfusionChance = 10,
   InfusionOverride = false,
   InfusionWhenRequirementsMet = false,
-    HermesRarity = false,
+  HermesRarity = false,
   NewSaveOverride = false
 }, {
   AlwaysAllowed = "Ignore all requirements (Book of Shadows, Insight Into Offerings)",
@@ -30,6 +30,6 @@ return {
   HermesRarity = "Apply rarity chances to Hermes boons. Default: false",
   InfusionChance = "% Chance of Infusion boon. Default: 10",
   InfusionOverride = "Replaces the game's RNG for Infusion boons. Default: false",
-    InfusionWhenRequirementsMet = "Only offer Infusion boon if you have the required elements. Default: false",
-  NewSaveOverride = "NYI Removes the forced Common rarity from new saves. Default: false"
+  InfusionWhenRequirementsMet = "Only offer Infusion boon if you have the required elements. Default: false",
+  NewSaveOverride = "Removes the forced Common rarity from new saves. Default: false"
 }
