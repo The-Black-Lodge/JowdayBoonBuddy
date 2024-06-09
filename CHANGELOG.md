@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.6.3] - 2024-06-09
+
 ## Changed
 
 - rename Replace to Sacrifice
@@ -89,7 +91,8 @@
 
 - When accepting a God boon, allows you to view the Book of Shadows entry. Requires the Insight into Offerings incantation to be unlocked.
 
-[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.2...HEAD
+[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.3...HEAD
+[0.6.3]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.2...0.6.3
 [0.6.2]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.5.0...0.6.1
 [0.5.0]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.4.0...0.5.0
