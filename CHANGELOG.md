@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## Changed
+
+- rename Replace to Sacrifice
+
 ## [0.6.2] - 2024-06-08
 
 ## Fixed

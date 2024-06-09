@@ -109,7 +109,7 @@ function drawMenu()
     end
     rom.ImGui.PopStyleColor()
 
-    value, selected = rom.ImGui.SliderInt("% Replace", config.ReplaceChance, 0, 100)
+    value, selected = rom.ImGui.SliderInt("% Sacrifice", config.ReplaceChance, 0, 100)
     if selected then
         config.ReplaceChance = value
         adjustRarityValues()
