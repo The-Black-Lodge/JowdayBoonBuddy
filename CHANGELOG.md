@@ -3,6 +3,7 @@
 ## [Unreleased]
 ## Added
 - add rarity for hades
+- add rarity for artemis
 
 ## [0.6.4] - 2024-06-09
 
