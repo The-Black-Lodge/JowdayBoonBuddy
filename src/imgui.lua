@@ -129,6 +129,13 @@ function drawMenu()
         adjustRarityValues()
     end
 
+    value, checked = rom.ImGui.Checkbox("Apply to Hades",
+        config.HadesRarity)
+    if checked then
+        config.HadesRarity = value
+        adjustRarityValues()
+    end
+
     value, checked = rom.ImGui.Checkbox("Allow increased rarity on new saves",
     config.NewSaveOverride)
     if checked then

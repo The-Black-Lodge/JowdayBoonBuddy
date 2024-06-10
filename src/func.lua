@@ -13,6 +13,8 @@ function getDefaults()
     DefaultReplaceChance = game.HeroData.BoonData.ReplaceChance
     DefaultArtemisRarity = game.DeepCopyTable(game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances)
     DefaultArtemisRollOrder = game.DeepCopyTable(game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder)
+    DefaultHadesRarity = game.DeepCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances)
+    DefaultHadesRollOrder = game.DeepCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder)
 end
 
 function overrideInfusionGameStateRequirements()
@@ -70,14 +72,11 @@ end
 
 function adjustRarityValues()
     -- adds Heroic to the rolls
-    game.TraitRarityData.BoonRarityRollOrder = { "Common", "Rare", "Epic", "Heroic", "Duo", "Legendary" }
+    local rarityOrder = { "Common", "Rare", "Epic", "Heroic", "Duo", "Legendary" }
+    game.TraitRarityData.BoonRarityRollOrder = rarityOrder
     game.TraitRarityData.BoonRarityReverseRollOrder = { "Legendary", "Duo", "Heroic", "Epic", "Rare", "Common" }
-    game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = { "Common", "Rare", "Epic", "Heroic"}
-
-    -- removes the 2 min completed runs thing
-    if config.NewSaveOverride then
-        -- not doing anything just yet...
-    end
+    game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = rarityOrder
+    game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = rarityOrder
 
     -- make sure everything is a number
     local min, rare, epic, heroic, duo, legendary, replace
@@ -122,47 +121,41 @@ function adjustRarityValues()
     local artemis = config.ArtemisRarity
     local hades = config.HadesRarity
 
-    if min == 1 then
-        game.CurrentRun.Hero.BoonData.RarityChances.Rare = 1
-        if hermes == true then game.CurrentRun.Hero.HermesData.RarityChances.Rare = 1 end
-        if artemis == true then game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances.Rare = 1 end
-    elseif min == 2 then
-        game.CurrentRun.Hero.BoonData.RarityChances.Epic = 1
-        if hermes == true then game.CurrentRun.Hero.HermesData.RarityChances.Epic = 1 end
-        if artemis == true then game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances.Epic = 1 end
-    elseif min == 3 then
-        game.CurrentRun.Hero.BoonData.RarityChances.Heroic = 1
-        if hermes == true then game.CurrentRun.Hero.HermesData.RarityChances.Heroic = 1 end
-        if artemis == true then game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances.Heroic = 1 end
-    end
-    -- apply Chance overrides
-    if min == 0 then
-        game.CurrentRun.Hero.BoonData.RarityChances.Rare = rare
-        if hermes == true then game.CurrentRun.Hero.HermesData.RarityChances.Rare = rare end
-        if artemis == true then game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances.Rare = rare end
-    end
-    if min < 2 then
-        game.CurrentRun.Hero.BoonData.RarityChances.Epic = epic
-        if hermes == true then game.CurrentRun.Hero.HermesData.RarityChances.Epic = epic end
-        if artemis == true then game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances.Epic = epic end
-    end
-    if min < 3 then
-        game.CurrentRun.Hero.BoonData.RarityChances.Heroic = heroic
-        if hermes == true then game.CurrentRun.Hero.HermesData.RarityChances.Heroic = heroic end
-        if artemis == true then game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances.Heroic = heroic end
-    end
-    game.CurrentRun.Hero.BoonData.RarityChances.Duo = duo
-    game.CurrentRun.Hero.BoonData.RarityChances.Legendary = legendary
-    game.CurrentRun.Hero.BoonData.ReplaceChance = replace
-    if hermes == true then game.CurrentRun.Hero.HermesData.RarityChances.Legendary = legendary end
+    local rarityTable = {}
 
-    -- reset hermes, artemis if unchecked
-    if hermes == false then
+    -- insert slider values
+    rarityTable.Rare = rare
+    rarityTable.Epic = epic
+    rarityTable.Heroic = heroic
+    rarityTable.Duo = duo
+    rarityTable.Legendary = legendary
+
+    -- apply overrides
+    if min == 1 then rarityTable.Rare = 1 end
+    if min == 2 then rarityTable.Epic = 1 end
+    if min == 3 then rarityTable.Heroic = 1 end
+
+    -- apply to regular boons
+    game.CurrentRun.Hero.BoonData.RarityChances = rarityTable
+
+    -- apply to friends
+    if hermes == true then
+        game.CurrentRun.Hero.HermesData.RarityChances = rarityTable
+    else
         game.CurrentRun.Hero.HermesData.RarityChances = game.DeepCopyTable(DefaultHermesRarity)
     end
-    if artemis == false then
+    if artemis == true then
+        game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = rarityTable
+    else
         game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = game.DeepCopyTable(DefaultArtemisRarity)
         game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = game.DeepCopyTable(DefaultArtemisRollOrder)
+    end
+    -- this doesn't do anything currently - see the GetRarityChances wrap
+    if hades == true then
+        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = rarityTable
+    else
+        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = game.DeepCopyTable(DefaultHadesRarity)
+        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = game.DeepCopyTable(DefaultHadesRollOrder)
     end
 end
 

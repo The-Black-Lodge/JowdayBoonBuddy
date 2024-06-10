@@ -71,10 +71,8 @@ modutil.mod.Path.Wrap("IsRarityForcedCommon", function(base, name, args)
     return forced
 end)
 
--- just some debugging
--- modutil.mod.Path.Wrap("GetRarityChances", function(base, loot)
---     print(game.TableToJSONString(loot))
---     local rarity = base(loot)
---     print(game.TableToJSONString(rarity))
---     return rarity
--- end)
+modutil.mod.Path.Wrap("GetRarityChances", function(base, loot)
+    -- unfortunately Daddy's loot incorrectly uses the BoonData chances, so a manual override is needed here if we want default behavior
+    if config.HadesRarity == false then return DefaultHadesRarity end
+    return base(loot)
+end)
