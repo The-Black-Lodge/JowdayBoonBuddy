@@ -70,3 +70,11 @@ modutil.mod.Path.Wrap("IsRarityForcedCommon", function(base, name, args)
     end
     return forced
 end)
+
+-- just some debugging
+-- modutil.mod.Path.Wrap("GetRarityChances", function(base, loot)
+--     print(game.TableToJSONString(loot))
+--     local rarity = base(loot)
+--     print(game.TableToJSONString(rarity))
+--     return rarity
+-- end)

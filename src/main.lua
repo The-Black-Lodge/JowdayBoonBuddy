@@ -43,6 +43,8 @@ local function on_ready()
     DefaultBoonRarity = {}
     DefaultHermesRarity = {}
     DefaultReplaceChance = 0.1
+    DefaultArtemisRarity = {}
+    DefaultArtemisRollOrder = {}
 
     import 'wrap.lua'
 end

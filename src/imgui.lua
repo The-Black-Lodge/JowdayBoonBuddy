@@ -122,6 +122,13 @@ function drawMenu()
         adjustRarityValues()
     end
 
+    value, checked = rom.ImGui.Checkbox("Apply to Artemis",
+        config.ArtemisRarity)
+    if checked then
+        config.ArtemisRarity = value
+        adjustRarityValues()
+    end
+
     value, checked = rom.ImGui.Checkbox("Allow increased rarity on new saves",
     config.NewSaveOverride)
     if checked then
@@ -139,6 +146,7 @@ function drawMenu()
         config.DuoChance = DefaultBoonRarity.Duo * 100
         config.ReplaceChance = DefaultReplaceChance * 100
         config.HermesRarity = false
+        config.ArtemisRarity = false
         config.NewSaveOverride = false
         adjustRarityValues()
     end
