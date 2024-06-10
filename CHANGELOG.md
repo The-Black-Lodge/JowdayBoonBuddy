@@ -1,7 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.6.5] - 2024-06-10
+
 ## Added
+
 - add rarity for hades
 - add rarity for artemis
 
@@ -104,7 +108,8 @@
 
 - When accepting a God boon, allows you to view the Book of Shadows entry. Requires the Insight into Offerings incantation to be unlocked.
 
-[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.4...HEAD
+[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.5...HEAD
+[0.6.5]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.4...0.6.5
 [0.6.4]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.3...0.6.4
 [0.6.3]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.2...0.6.3
 [0.6.2]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.1...0.6.2
