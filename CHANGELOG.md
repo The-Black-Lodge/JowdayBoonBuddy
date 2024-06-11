@@ -1,10 +1,15 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.6.6] - 2024-06-11
+
 ## Removed
+
 - removed the "new save" checkbox because it wasn't working
 
 ## Fixed
+
 - fix rarities not applying to fresh saves
 - override some more forced rarity tables/flags
 
@@ -114,7 +119,8 @@
 
 - When accepting a God boon, allows you to view the Book of Shadows entry. Requires the Insight into Offerings incantation to be unlocked.
 
-[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.5...HEAD
+[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.6...HEAD
+[0.6.6]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.5...0.6.6
 [0.6.5]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.4...0.6.5
 [0.6.4]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.3...0.6.4
 [0.6.3]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.2...0.6.3
