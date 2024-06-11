@@ -136,12 +136,13 @@ function drawMenu()
         adjustRarityValues()
     end
 
-    value, checked = rom.ImGui.Checkbox("Allow increased rarity on new saves",
-    config.NewSaveOverride)
-    if checked then
-        config.NewSaveOverride = value
-        adjustRarityValues()
-    end
+    -- this appears to be problematic
+    -- value, checked = rom.ImGui.Checkbox("Allow increased rarity on new saves",
+    -- config.NewSaveOverride)
+    -- if checked then
+    --     config.NewSaveOverride = value
+    --     adjustRarityValues()
+    -- end
 
     reset = rom.ImGui.Button("Reset rarity")
     if reset then

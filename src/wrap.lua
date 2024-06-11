@@ -63,16 +63,18 @@ modutil.mod.Path.Wrap("SaveCheckpoint", function(base, args)
 end)
 
 modutil.mod.Path.Wrap("IsRarityForcedCommon", function(base, name, args)
-    local forced = base(name, args)
-        -- override new save thing
-    if config.NewSaveOverride == true and game.CurrentRun.CurrentRoom.ForceCommonLootFirstRun then
-        return false
+    -- override this in most cases
+    if name == "StackUpgrade" then
+        return true
+    elseif name == "WeaponUpgrade" then
+        return true
     end
-    return forced
+    return false
 end)
 
 modutil.mod.Path.Wrap("GetRarityChances", function(base, loot)
-    -- unfortunately Daddy's loot incorrectly uses the BoonData chances, so a manual override is needed here if we want default behavior
     if config.HadesRarity == false then return DefaultHadesRarity end
+    -- prevents the game from overriding our rarity settings
+    game.CurrentRun.CurrentRoom.BoonRaritiesOverride = nil
     return base(loot)
 end)
