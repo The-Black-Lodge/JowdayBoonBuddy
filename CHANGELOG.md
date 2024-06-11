@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+## Removed
+- removed the "new save" checkbox because it wasn't working
+
+## Fixed
+- fix rarities not applying to fresh saves
+- override some more forced rarity tables/flags
 
 ## [0.6.5] - 2024-06-10
 
