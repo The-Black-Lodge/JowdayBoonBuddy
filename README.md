@@ -1,6 +1,6 @@
 # Boon Buddy
 ## Configure boon rarity in-game!
-![image](https://github.com/The-Black-Lodge/JowdayBoonBuddy/assets/7319207/9959018d-47ca-45cd-af87-8329cc58a6fb)
+![BoonBuddy](https://github.com/The-Black-Lodge/JowdayBoonBuddy/assets/7319207/0b4c2a0b-0e5c-48cb-b1e4-a9efd0a680b2)
 
 ## Display banned boons!
 When viewing the boon list, boons that have been banned by the Vow of Forsaking will have red text.
@@ -16,9 +16,9 @@ This mod disables the requirements for the **Offerings** button by default.
 - Navigate to BoonBuddy:
 
 `Mods -> Jowday-BoonBuddy -> Configure` \
-![image](https://github.com/The-Black-Lodge/JowdayBoonBuddy/assets/7319207/42971050-5b9f-4595-a3b5-d2020dbfab58)
+![NavigateViaConfigure](https://github.com/The-Black-Lodge/JowdayBoonBuddy/assets/7319207/42971050-5b9f-4595-a3b5-d2020dbfab58)
 
 **OR** 
 
 `Windows -> Jowday-BoonBuddy` \
-![image](https://github.com/The-Black-Lodge/JowdayBoonBuddy/assets/7319207/b6ef598e-d062-470a-884e-ea0f2ce7ab33)
+![NavigateViaWindows](https://github.com/The-Black-Lodge/JowdayBoonBuddy/assets/7319207/b6ef598e-d062-470a-884e-ea0f2ce7ab33)
