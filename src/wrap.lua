@@ -75,7 +75,5 @@ end)
 modutil.mod.Path.Wrap("GetRarityChances", function(base, loot)
     -- in the real code, Daddy appears to inadvertently use BoonData rarity despite having his own rarity table and roll order. possibly a bug
     if loot.Name == 'NPC_Hades_Field_01' and config.HadesRarity == false then return DefaultHadesRarity end
-    -- prevents the game from overriding our rarity settings, unsure if needed
-    game.CurrentRun.CurrentRoom.BoonRaritiesOverride = nil
     return base(loot)
 end)

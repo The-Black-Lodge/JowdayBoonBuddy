@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+## Fixed
+- remove an unnecessary override
 
 ## [0.6.7] - 2024-06-12
 
