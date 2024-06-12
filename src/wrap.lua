@@ -76,5 +76,9 @@ modutil.mod.Path.Wrap("GetRarityChances", function(base, loot)
     if config.HadesRarity == false then return DefaultHadesRarity end
     -- prevents the game from overriding our rarity settings
     game.CurrentRun.CurrentRoom.BoonRaritiesOverride = nil
-    return base(loot)
+
+    local rarityChances = base(loot)
+    print('GetRarityChances: ' .. game.TableToJSONString(rarityChances))
+
+    return rarityChances
 end)

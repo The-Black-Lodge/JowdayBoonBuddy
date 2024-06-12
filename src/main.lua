@@ -54,6 +54,8 @@ end
 local function on_reload()
     if config.enabled == false then return end
 
+    perfect = mods['Jowday-Perfectoinist']
+
     import 'func.lua'
     import 'imgui.lua'
 end

@@ -70,7 +70,7 @@ function getEligibleElementalTrait(traits, options)
     return elementalTrait
 end
 
-function adjustRarityValues()
+function public.adjustRarityValues()
     -- adds Heroic to the rolls
     local rarityOrder = { "Common", "Rare", "Epic", "Heroic", "Duo", "Legendary", "Perfect" }
     game.TraitRarityData.BoonRarityRollOrder = rarityOrder
@@ -129,7 +129,20 @@ function adjustRarityValues()
     rarityTable.Heroic = heroic
     rarityTable.Duo = duo
     rarityTable.Legendary = legendary
-    rarityTable.Perfect = 1
+
+    -- plugins go here
+    local mods = rom.mods
+    local perfect = mods['Jowday-Perfectoinist']
+    if perfect then
+        if type(perfect.config.PerfectChance) == 'number' then
+            perfect = math.min(perfect.config.PerfectChance / 100, 1)
+        else
+            perfect = perfect.DefaultPerfectChance
+        end
+        rarityTable.Perfect = perfect
+    end
+
+    print('rarityTable: ' .. game.TableToJSONString(rarityTable))
 
     -- apply overrides
     if min == 1 then rarityTable.Rare = 1 end
