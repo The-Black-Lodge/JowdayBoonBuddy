@@ -73,8 +73,13 @@ modutil.mod.Path.Wrap("IsRarityForcedCommon", function(base, name, args)
 end)
 
 modutil.mod.Path.Wrap("GetRarityChances", function(base, loot)
-    if config.HadesRarity == false then return DefaultHadesRarity end
+    --Adding this as another check, not *really* needed but maybe keep it as a safeguard?
+    --So that if rarity = 0 do nothing
+    if config.MinimumRarity == 0 then return end
+
     -- prevents the game from overriding our rarity settings
     game.CurrentRun.CurrentRoom.BoonRaritiesOverride = nil
+
+    if config.HadesRarity == false then return DefaultHadesRarity end
     return base(loot)
 end)
