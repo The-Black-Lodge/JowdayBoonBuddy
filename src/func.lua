@@ -74,7 +74,7 @@ function getEligibleElementalTrait(traits, options)
 end
 
 function public.adjustRarityValues()
-    -- load up friend mods
+    -- load up perfectoinist
     local mods = rom.mods
     local perfectMod = mods['Jowday-Perfectoinist']
 
@@ -139,9 +139,7 @@ function public.adjustRarityValues()
 
     local upgradeOrder = game.ShallowCopyTable(DefaultRarityUpgradeOrder)
 
-
-
-    -- plugins go here
+    -- perfectoinist plugin
     if perfectMod then
         local perfect
         if type(perfectMod.config.PerfectChance) == 'number' then

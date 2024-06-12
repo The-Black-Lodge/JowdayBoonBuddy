@@ -195,10 +195,11 @@ function drawMenu()
     end
 
     local mods = rom.mods
-    local perfect = mods['Jowday-Perfectoinist']
-    if perfect then
+    -- perfectoinist plugin
+    local perfectMod = mods['Jowday-Perfectoinist']
+    if perfectMod then
         rom.ImGui.Separator()
         rom.ImGui.Text("PLUGINS")
-        perfect.drawPerfectPlugin()
+        perfectMod.drawPerfectPlugin()
     end
 end
