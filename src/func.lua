@@ -72,9 +72,9 @@ end
 
 function adjustRarityValues()
     -- adds Heroic to the rolls
-    local rarityOrder = { "Common", "Rare", "Epic", "Heroic", "Duo", "Legendary" }
+    local rarityOrder = { "Common", "Rare", "Epic", "Heroic", "Duo", "Legendary", "Perfect" }
     game.TraitRarityData.BoonRarityRollOrder = rarityOrder
-    game.TraitRarityData.BoonRarityReverseRollOrder = { "Legendary", "Duo", "Heroic", "Epic", "Rare", "Common" }
+    game.TraitRarityData.BoonRarityReverseRollOrder = { "Perfect", "Legendary", "Duo", "Heroic", "Epic", "Rare", "Common" }
     game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = rarityOrder
     game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = rarityOrder
 
@@ -129,6 +129,7 @@ function adjustRarityValues()
     rarityTable.Heroic = heroic
     rarityTable.Duo = duo
     rarityTable.Legendary = legendary
+    rarityTable.Perfect = 1
 
     -- apply overrides
     if min == 1 then rarityTable.Rare = 1 end
