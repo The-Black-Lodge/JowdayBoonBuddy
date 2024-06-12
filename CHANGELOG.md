@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+## Added
+- plugin support for Perfectoinist
 
 ## [0.6.8] - 2024-06-12
 

@@ -8,13 +8,16 @@ function getDefaults()
         end
     end
 
-    DefaultBoonRarity = game.HeroData.BoonData.RarityChances
-    DefaultHermesRarity = game.HeroData.HermesData.RarityChances
+    DefaultBoonRarity = game.ShallowCopyTable(game.HeroData.BoonData.RarityChances)
+    DefaultHermesRarity = game.ShallowCopyTable(game.HeroData.HermesData.RarityChances)
     DefaultReplaceChance = game.HeroData.BoonData.ReplaceChance
-    DefaultArtemisRarity = game.DeepCopyTable(game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances)
-    DefaultArtemisRollOrder = game.DeepCopyTable(game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder)
-    DefaultHadesRarity = game.DeepCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances)
-    DefaultHadesRollOrder = game.DeepCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder)
+    DefaultArtemisRarity = game.ShallowCopyTable(game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances)
+    DefaultArtemisRollOrder = game.ShallowCopyTable(game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder)
+    DefaultHadesRarity = game.ShallowCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances)
+    DefaultHadesRollOrder = game.ShallowCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder)
+    DefaultRarityOrder = game.ShallowCopyTable(game.TraitRarityData.BoonRarityRollOrder)
+    DefaultRarityReverseOrder = game.ShallowCopyTable(game.TraitRarityData.BoonRarityReverseRollOrder)
+    DefaultRarityUpgradeOrder = game.ShallowCopyTable(game.TraitRarityData.RarityUpgradeOrder)
 end
 
 function overrideInfusionGameStateRequirements()
@@ -70,13 +73,10 @@ function getEligibleElementalTrait(traits, options)
     return elementalTrait
 end
 
-function adjustRarityValues()
-    -- adds Heroic to the rolls
-    local rarityOrder = { "Common", "Rare", "Epic", "Heroic", "Duo", "Legendary" }
-    game.TraitRarityData.BoonRarityRollOrder = rarityOrder
-    game.TraitRarityData.BoonRarityReverseRollOrder = { "Legendary", "Duo", "Heroic", "Epic", "Rare", "Common" }
-    game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = rarityOrder
-    game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = rarityOrder
+function public.adjustRarityValues()
+    -- load up perfectoinist
+    local mods = rom.mods
+    local perfectMod = mods['Jowday-Perfectoinist']
 
     -- make sure everything is a number
     local min, rare, epic, heroic, duo, legendary, replace
@@ -130,6 +130,41 @@ function adjustRarityValues()
     rarityTable.Duo = duo
     rarityTable.Legendary = legendary
 
+    -- adds Heroic to the rolls
+    local rarityOrder = game.ShallowCopyTable(DefaultRarityOrder)
+    if heroic > 0 or min > 2 then rarityOrder = { "Common", "Rare", "Epic", "Heroic", "Duo", "Legendary" } end
+
+    local reverseOrder = game.ShallowCopyTable(DefaultRarityReverseOrder)
+    if heroic > 0 or min > 2 then reverseOrder = { "Legendary", "Duo", "Heroic", "Epic", "Rare", "Common" } end
+
+    local upgradeOrder = game.ShallowCopyTable(DefaultRarityUpgradeOrder)
+
+    -- perfectoinist plugin
+    if perfectMod then
+        local perfect
+        if type(perfectMod.config.PerfectChance) == 'number' then
+            perfect = math.min(perfectMod.config.PerfectChance / 100, 1)
+        else
+            perfect = perfectMod.DefaultPerfectChance
+        end
+        rarityTable.Perfect = perfect
+        if perfect > 0 then
+            table.insert(rarityOrder, "Perfect")
+            table.insert(reverseOrder, 1, "Perfect")
+        end
+        if perfectMod.config.AllowPerfectSacrifice then
+            table.insert(upgradeOrder, "Perfect")
+        end
+    end
+
+    -- apply roll order after plugins/etc
+    game.TraitRarityData.BoonRarityRollOrder = rarityOrder
+    game.TraitRarityData.BoonRarityReverseRollOrder = reverseOrder
+    game.TraitRarityData.RarityUpgradeOrder = upgradeOrder
+    game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = rarityOrder
+    -- this seems to be ignored currently, but putting it here anyway
+    game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = rarityOrder
+
     -- apply overrides
     if min == 1 then rarityTable.Rare = 1 end
     if min == 2 then rarityTable.Epic = 1 end
@@ -142,20 +177,21 @@ function adjustRarityValues()
     if hermes == true then
         game.CurrentRun.Hero.HermesData.RarityChances = rarityTable
     else
-        game.CurrentRun.Hero.HermesData.RarityChances = game.DeepCopyTable(DefaultHermesRarity)
+        game.CurrentRun.Hero.HermesData.RarityChances = game.ShallowCopyTable(DefaultHermesRarity)
     end
     if artemis == true then
         game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = rarityTable
     else
-        game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = game.DeepCopyTable(DefaultArtemisRarity)
-        game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = game.DeepCopyTable(DefaultArtemisRollOrder)
+        game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = game.ShallowCopyTable(DefaultArtemisRarity)
+        game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = game.ShallowCopyTable(
+        DefaultArtemisRollOrder)
     end
     -- this doesn't do anything currently - see the GetRarityChances wrap
     if hades == true then
         game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = rarityTable
     else
-        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = game.DeepCopyTable(DefaultHadesRarity)
-        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = game.DeepCopyTable(DefaultHadesRollOrder)
+        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = game.ShallowCopyTable(DefaultHadesRarity)
+        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = game.ShallowCopyTable(DefaultHadesRollOrder)
     end
 end
 

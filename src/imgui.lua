@@ -193,4 +193,13 @@ function drawMenu()
         end
         rom.ImGui.PopStyleColor()
     end
+
+    local mods = rom.mods
+    -- perfectoinist plugin
+    local perfectMod = mods['Jowday-Perfectoinist']
+    if perfectMod then
+        rom.ImGui.Separator()
+        rom.ImGui.Text("PLUGINS")
+        perfectMod.drawPerfectPlugin()
+    end
 end

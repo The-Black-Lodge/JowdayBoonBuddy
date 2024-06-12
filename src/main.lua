@@ -47,12 +47,17 @@ local function on_ready()
     DefaultArtemisRollOrder = {}
     DefaultHadesRarity = {}
     DefaultHadesRollOrder = {}
+    DefaultRarityOrder = {}
+    DefaultRarityReverseOrder = {}
+    DefaultRarityUpgradeOrder = {}
 
     import 'wrap.lua'
 end
 
 local function on_reload()
     if config.enabled == false then return end
+
+    perfect = mods['Jowday-Perfectoinist']
 
     import 'func.lua'
     import 'imgui.lua'
