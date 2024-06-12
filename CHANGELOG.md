@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+## Fixed
+- fixed silly bug where unchecking Hades disables the whole mod
 
 ## [0.6.6] - 2024-06-11
 
