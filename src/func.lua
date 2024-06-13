@@ -8,6 +8,12 @@ function getDefaults()
         end
     end
 
+    for traitName, vals in pairs(game.TraitData) do
+        if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
+            DefaultInfusionActivationRequirements[traitName] = game.DeepCopyTable(vals.ActivationRequirements)
+        end
+    end
+
     DefaultBoonRarity = game.ShallowCopyTable(game.HeroData.BoonData.RarityChances)
     DefaultHermesRarity = game.ShallowCopyTable(game.HeroData.HermesData.RarityChances)
     DefaultReplaceChance = game.HeroData.BoonData.ReplaceChance
@@ -15,6 +21,7 @@ function getDefaults()
     DefaultArtemisRollOrder = game.ShallowCopyTable(game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder)
     DefaultHadesRarity = game.ShallowCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances)
     DefaultHadesRollOrder = game.ShallowCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder)
+    DefaultChaosRarity = game.ShallowCopyTable(game.LootSetData.Chaos.TrialUpgrade.BoonRaritiesOverride)
     DefaultRarityOrder = game.ShallowCopyTable(game.TraitRarityData.BoonRarityRollOrder)
     DefaultRarityReverseOrder = game.ShallowCopyTable(game.TraitRarityData.BoonRarityReverseRollOrder)
     DefaultRarityUpgradeOrder = game.ShallowCopyTable(game.TraitRarityData.RarityUpgradeOrder)
@@ -59,9 +66,14 @@ function getEligibleElementalTrait(traits, options)
     if isTraitBanned(elementalTrait) then return nil end
 
     -- check for elemental requirement
+    local activationReqs = game.DeepCopyTable(DefaultInfusionActivationRequirements[elementalTrait])
+    local activated = game.IsGameStateEligible(game.CurrentRun, activationReqs)
+
     local requirements = game.TraitData[elementalTrait].GameStateRequirements
     local eligible = game.IsGameStateEligible(game.CurrentRun, requirements)
-    if eligible == false then return nil end
+    if eligible == false then
+        return nil
+    end
 
     -- check that it isn't already being offered
     local offered = false
@@ -70,7 +82,7 @@ function getEligibleElementalTrait(traits, options)
     end
     if offered == true then return end
 
-    return elementalTrait
+    return elementalTrait, eligible, activated
 end
 
 function public.adjustRarityValues()
@@ -120,6 +132,7 @@ function public.adjustRarityValues()
     local hermes = config.HermesRarity
     local artemis = config.ArtemisRarity
     local hades = config.HadesRarity
+    local chaos = config.ChaosRarity
 
     local rarityTable = {}
 
@@ -166,9 +179,9 @@ function public.adjustRarityValues()
     game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = rarityOrder
 
     -- apply overrides
-    if min == 1 then rarityTable.Rare = 1 end
-    if min == 2 then rarityTable.Epic = 1 end
-    if min == 3 then rarityTable.Heroic = 1 end
+    if min > 0 then rarityTable.Rare = 1 end
+    if min > 1 then rarityTable.Epic = 1 end
+    if min > 2 then rarityTable.Heroic = 1 end
 
     -- apply to regular boons
     game.CurrentRun.Hero.BoonData.RarityChances = rarityTable
@@ -193,11 +206,26 @@ function public.adjustRarityValues()
         game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = game.ShallowCopyTable(DefaultHadesRarity)
         game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = game.ShallowCopyTable(DefaultHadesRollOrder)
     end
+    if chaos == true then
+        game.LootSetData.Chaos.TrialUpgrade.BoonRaritiesOverride = rarityTable
+    else
+        game.LootSetData.Chaos.TrialUpgrade.BoonRaritiesOverride = game.ShallowCopyTable(DefaultChaosRarity)
+    end
 end
 
 function revertDefaultRarity()
     game.CurrentRun.Hero.BoonData = game.DeepCopyTable(game.HeroData.BoonData)
     game.CurrentRun.Hero.HermesData = game.DeepCopyTable(game.HeroData.HermesData)
+end
+
+function getReplaceableIndices(options)
+    local indices = {}
+    for i, option in ipairs(options) do
+        if option.Rarity ~= "Duo" and option.Rarity ~= "Legendary" then
+            table.insert(indices, i)
+        end
+    end
+    return indices
 end
 
 -- vow of forsaking functions

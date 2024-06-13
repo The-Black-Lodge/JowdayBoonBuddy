@@ -40,6 +40,7 @@ local function on_ready()
     if config.enabled == false then return end
 
     DefaultInfusionGameStateRequirements = {}
+    DefaultInfusionActivationRequirements = {}
     DefaultBoonRarity = {}
     DefaultHermesRarity = {}
     DefaultReplaceChance = 0.1
@@ -47,6 +48,7 @@ local function on_ready()
     DefaultArtemisRollOrder = {}
     DefaultHadesRarity = {}
     DefaultHadesRollOrder = {}
+    DefaultChaosRarity = {}
     DefaultRarityOrder = {}
     DefaultRarityReverseOrder = {}
     DefaultRarityUpgradeOrder = {}
@@ -77,7 +79,7 @@ modutil.once_loaded.save(function()
     getDefaults()
     adjustRarityValues()
     updateBoonListRequirements()
-    if config.InfusionOverride == true then
+    if config.OnlyOfferInfusionWhenActivated == true then
         overrideInfusionGameStateRequirements()
     end
 end)

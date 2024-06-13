@@ -25,9 +25,9 @@ function drawMenu()
 
     rom.ImGui.Separator()
 
-    rom.ImGui.Text("Minimum boon rarity:")
+    rom.ImGui.Text("Minimum boon rarity")
 
-    value, pressed = rom.ImGui.RadioButton("Common", config.MinimumRarity, 0)
+    value, pressed = rom.ImGui.RadioButton("Common##radio", config.MinimumRarity, 0)
     if pressed then
         config.MinimumRarity = value
         adjustRarityValues()
@@ -35,7 +35,7 @@ function drawMenu()
 
     rom.ImGui.SameLine()
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0, 0.54, 1, 1)
-    value, pressed = rom.ImGui.RadioButton("Rare", config.MinimumRarity, 1)
+    value, pressed = rom.ImGui.RadioButton("Rare##radio", config.MinimumRarity, 1)
     if pressed then
         config.MinimumRarity = value
         adjustRarityValues()
@@ -44,7 +44,7 @@ function drawMenu()
 
     rom.ImGui.SameLine()
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.62, 0.07, 1, 1)
-    value, pressed = rom.ImGui.RadioButton("Epic", config.MinimumRarity, 2)
+    value, pressed = rom.ImGui.RadioButton("Epic##radio", config.MinimumRarity, 2)
     if pressed then
         config.MinimumRarity = value
         adjustRarityValues()
@@ -53,7 +53,7 @@ function drawMenu()
 
     rom.ImGui.SameLine()
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.97, 0.38, 0.35, 1)
-    value, pressed = rom.ImGui.RadioButton("Heroic", config.MinimumRarity, 3)
+    value, pressed = rom.ImGui.RadioButton("Heroic##radio", config.MinimumRarity, 3)
     if pressed then
         config.MinimumRarity = value
         adjustRarityValues()
@@ -61,11 +61,11 @@ function drawMenu()
     rom.ImGui.PopStyleColor()
 
     rom.ImGui.Separator()
-    rom.ImGui.Text("Base rarity chances:")
+    rom.ImGui.Text("Base rarity chances")
 
     if config.MinimumRarity == 0 then
         rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0, 0.54, 1, 1)
-        value, selected = rom.ImGui.SliderInt("% Rare", config.RareChance, 0, 100)
+        value, selected = rom.ImGui.SliderInt("Rare", config.RareChance, 0, 100, '%d%%')
         if selected then
             config.RareChance = value
             adjustRarityValues()
@@ -75,7 +75,7 @@ function drawMenu()
 
     if config.MinimumRarity < 2 then
         rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.62, 0.07, 1, 1)
-        value, selected = rom.ImGui.SliderInt("% Epic", config.EpicChance, 0, 100)
+        value, selected = rom.ImGui.SliderInt("Epic", config.EpicChance, 0, 100, '%d%%')
         if selected then
             config.EpicChance = value
             adjustRarityValues()
@@ -85,7 +85,7 @@ function drawMenu()
 
     if config.MinimumRarity < 3 then
         rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.97, 0.38, 0.35, 1)
-        value, selected = rom.ImGui.SliderInt("% Heroic", config.HeroicChance, 0, 100)
+        value, selected = rom.ImGui.SliderInt("Heroic", config.HeroicChance, 0, 100, '%d%%')
         if selected then
             config.HeroicChance = value
             adjustRarityValues()
@@ -94,7 +94,7 @@ function drawMenu()
     end
 
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 1, 0.56, 0, 1)
-    value, selected = rom.ImGui.SliderInt("% Legendary", config.LegendaryChance, 0, 100)
+    value, selected = rom.ImGui.SliderInt("Legendary", config.LegendaryChance, 0, 100, '%d%%')
     if selected then
         config.LegendaryChance = value
         adjustRarityValues()
@@ -102,14 +102,14 @@ function drawMenu()
     rom.ImGui.PopStyleColor()
 
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.82, 1, 0.38, 1)
-    value, selected = rom.ImGui.SliderInt("% Duo", config.DuoChance, 0, 100)
+    value, selected = rom.ImGui.SliderInt("Duo", config.DuoChance, 0, 100, '%d%%')
     if selected then
         config.DuoChance = value
         adjustRarityValues()
     end
     rom.ImGui.PopStyleColor()
 
-    value, selected = rom.ImGui.SliderInt("% Sacrifice", config.ReplaceChance, 0, 100)
+    value, selected = rom.ImGui.SliderInt("Sacrifice", config.ReplaceChance, 0, 100, '%d%%')
     if selected then
         config.ReplaceChance = value
         adjustRarityValues()
@@ -136,6 +136,13 @@ function drawMenu()
         adjustRarityValues()
     end
 
+    value, checked = rom.ImGui.Checkbox("Apply to Chaos (Max Epic)",
+        config.ChaosRarity)
+    if checked then
+        config.ChaosRarity = value
+        adjustRarityValues()
+    end
+
     -- this appears to be problematic
     -- value, checked = rom.ImGui.Checkbox("Allow increased rarity on new saves",
     -- config.NewSaveOverride)
@@ -155,43 +162,55 @@ function drawMenu()
         config.ReplaceChance = DefaultReplaceChance * 100
         config.HermesRarity = false
         config.ArtemisRarity = false
+        config.ChaosRarity = false
+        config.HadesRarity = false
         config.NewSaveOverride = false
         adjustRarityValues()
     end
 
     rom.ImGui.Separator()
 
-    rom.ImGui.Text("Infusions:")
-    value, checked = rom.ImGui.Checkbox("Only offer Infusions when activation requirements are met",
-        config.InfusionWhenRequirementsMet)
-    if checked then
-        config.InfusionWhenRequirementsMet = value
-        if value == true then
-            config.InfusionOverride = true
-            overrideInfusionGameStateRequirements()
-        else
-            revertInfusionGameStateRequirements()
-        end
-    end
+    rom.ImGui.Text("Infusions")
 
-    value, checked = rom.ImGui.Checkbox("Customize Infusion chance",
+    value, checked = rom.ImGui.Checkbox("Customize Infusion behavior",
         config.InfusionOverride)
     if checked then
         config.InfusionOverride = value
         if value == false then
-            config.InfusionWhenRequirementsMet = false
+            config.OnlyOfferInfusionWhenActivated = false
+            config.OnlyApplyInfusionChanceWhenActivated = false
             revertInfusionGameStateRequirements()
         end
     end
 
     if config.InfusionOverride == true then
-        rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 1, 0.29, 1, 1)
-        value, selected = rom.ImGui.SliderInt("% Infusion", config.InfusionChance, 0, 100)
-        if selected then
-            config.InfusionChance = value
-            adjustRarityValues()
+        value, checked = rom.ImGui.Checkbox("Only offer Infusions when activation requirements are met",
+            config.OnlyOfferInfusionWhenActivated)
+        if checked then
+            config.OnlyOfferInfusionWhenActivated = value
+            if value == true then
+                overrideInfusionGameStateRequirements()
+            else
+                revertInfusionGameStateRequirements()
+            end
         end
-        rom.ImGui.PopStyleColor()
+
+        if config.OnlyOfferInfusionWhenActivated == false then
+            value, checked = rom.ImGui.Checkbox("Only apply % chance when activation requirements are met",
+                config.OnlyApplyInfusionChanceWhenActivated)
+            if checked then
+                config.OnlyApplyInfusionChanceWhenActivated = value
+            end
+        end
+
+        if config.InfusionOverride == true then
+            rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 1, 0.29, 1, 1)
+            value, selected = rom.ImGui.SliderInt("Infusion", config.InfusionChance, 0, 100, '%d%%')
+            if selected then
+                config.InfusionChance = value
+            end
+            rom.ImGui.PopStyleColor()
+        end
     end
 
     local mods = rom.mods

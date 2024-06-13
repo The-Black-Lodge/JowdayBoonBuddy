@@ -1,6 +1,10 @@
 # Changelog
 
 ## [Unreleased]
+## Added
+- new Infusion option
+- limited Chaos support
+- prevent Duo/Legendary from being replaced with Infusion
 
 ## [0.6.9] - 2024-06-12
 
