@@ -1,7 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.6.10] - 2024-06-13
+
 ## Added
+
 - new Infusion option
 - limited Chaos support
 - prevent Duo/Legendary from being replaced with Infusion
@@ -141,7 +145,8 @@
 
 - When accepting a God boon, allows you to view the Book of Shadows entry. Requires the Insight into Offerings incantation to be unlocked.
 
-[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.9...HEAD
+[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.10...HEAD
+[0.6.10]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.9...0.6.10
 [0.6.9]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.8...0.6.9
 [0.6.8]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.7...0.6.8
 [0.6.7]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.6...0.6.7
