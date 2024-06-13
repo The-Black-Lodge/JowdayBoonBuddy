@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+## Fixed
+- remove unnecessary prints
 
 ## [0.6.10] - 2024-06-13
 
