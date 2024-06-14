@@ -1,7 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.6.12] - 2024-06-14
+
 ## Fixed
+
 - fix bug preventing Ordinary Chaos curse from ever being fulfilled
 
 ## [0.6.11] - 2024-06-13
@@ -153,7 +157,8 @@
 
 - When accepting a God boon, allows you to view the Book of Shadows entry. Requires the Insight into Offerings incantation to be unlocked.
 
-[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.11...HEAD
+[unreleased]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.12...HEAD
+[0.6.12]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.11...0.6.12
 [0.6.11]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.10...0.6.11
 [0.6.10]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.9...0.6.10
 [0.6.9]: https://github.com/The-Black-Lodge/JowdayBoonBuddy/compare/0.6.8...0.6.9
