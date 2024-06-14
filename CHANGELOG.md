@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+## Fixed
+- fix bug preventing Ordinary Chaos curse from ever being fulfilled
 
 ## [0.6.11] - 2024-06-13
 
