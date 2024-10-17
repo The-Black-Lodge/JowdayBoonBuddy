@@ -16,15 +16,6 @@ rom.gui.add_to_menu_bar(function()
 end)
 
 function drawMenu()
-    value, checked = rom.ImGui.Checkbox("Always allow Book of Shadows during boon selection",
-        config.AlwaysAllowed)
-    if checked then
-        config.AlwaysAllowed = value
-        updateBoonListRequirements()
-    end
-
-    rom.ImGui.Separator()
-
     rom.ImGui.Text("Minimum boon rarity")
 
     value, pressed = rom.ImGui.RadioButton("Common##radio", config.MinimumRarity, 0)
@@ -168,57 +159,70 @@ function drawMenu()
         adjustRarityValues()
     end
 
-    rom.ImGui.Separator()
-
-    rom.ImGui.Text("Infusions")
-
-    value, checked = rom.ImGui.Checkbox("Customize Infusion behavior",
-        config.InfusionOverride)
-    if checked then
-        config.InfusionOverride = value
-        if value == false then
-            config.OnlyOfferInfusionWhenActivated = false
-            config.OnlyApplyInfusionChanceWhenActivated = false
-            revertInfusionGameStateRequirements()
-        end
-    end
-
-    if config.InfusionOverride == true then
-        value, checked = rom.ImGui.Checkbox("Only offer Infusions when activation requirements are met",
-            config.OnlyOfferInfusionWhenActivated)
+    if rom.ImGui.CollapsingHeader("Infusions") then
+        value, checked = rom.ImGui.Checkbox("Customize Infusion behavior",
+            config.InfusionOverride)
         if checked then
-            config.OnlyOfferInfusionWhenActivated = value
-            if value == true then
-                overrideInfusionGameStateRequirements()
-            else
+            config.InfusionOverride = value
+            if value == false then
+                config.OnlyOfferInfusionWhenActivated = false
+                config.OnlyApplyInfusionChanceWhenActivated = false
                 revertInfusionGameStateRequirements()
             end
         end
 
-        if config.OnlyOfferInfusionWhenActivated == false then
-            value, checked = rom.ImGui.Checkbox("Only apply % chance when activation requirements are met",
-                config.OnlyApplyInfusionChanceWhenActivated)
+        if config.InfusionOverride == true then
+            value, checked = rom.ImGui.Checkbox("Only offer Infusions when activation requirements are met",
+                config.OnlyOfferInfusionWhenActivated)
             if checked then
-                config.OnlyApplyInfusionChanceWhenActivated = value
+                config.OnlyOfferInfusionWhenActivated = value
+                if value == true then
+                    overrideInfusionGameStateRequirements()
+                else
+                    revertInfusionGameStateRequirements()
+                end
+            end
+
+            if config.OnlyOfferInfusionWhenActivated == false then
+                value, checked = rom.ImGui.Checkbox("Only apply % chance when activation requirements are met",
+                    config.OnlyApplyInfusionChanceWhenActivated)
+                if checked then
+                    config.OnlyApplyInfusionChanceWhenActivated = value
+                end
+            end
+
+            if config.InfusionOverride == true then
+                rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 1, 0.29, 1, 1)
+                value, selected = rom.ImGui.SliderInt("Infusion", config.InfusionChance, 0, 100, '%d%%')
+                if selected then
+                    config.InfusionChance = value
+                end
+                rom.ImGui.PopStyleColor()
             end
         end
+    end
 
-        if config.InfusionOverride == true then
-            rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 1, 0.29, 1, 1)
-            value, selected = rom.ImGui.SliderInt("Infusion", config.InfusionChance, 0, 100, '%d%%')
-            if selected then
-                config.InfusionChance = value
-            end
-            rom.ImGui.PopStyleColor()
+    if rom.ImGui.CollapsingHeader("Miscellaneous") then
+        value, checked = rom.ImGui.Checkbox("Always allow Book of Shadows during boon selection",
+            config.AlwaysAllowed)
+        if checked then
+            config.AlwaysAllowed = value
+            updateBoonListRequirements()
         end
     end
 
     local mods = rom.mods
+    local compatibleMods = 0
+
     -- perfectoinist plugin
     local perfectMod = mods['Jowday-Perfectoinist']
-    if perfectMod then
-        rom.ImGui.Separator()
-        rom.ImGui.Text("PLUGINS")
-        perfectMod.drawPerfectPlugin()
+    if perfectMod then compatibleMods = compatibleMods + 1 end
+
+    if compatibleMods > 0 then
+        if rom.ImGui.CollapsingHeader("Plugins") then
+            if perfectMod then
+                perfectMod.drawPerfectPlugin()
+            end
+        end
     end
 end
