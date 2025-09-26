@@ -5,7 +5,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "Jowday"
 name = "BoonBuddy"
-versionNumber = "1.0.0"
+versionNumber = "1.0.1"
 description = "Fully customizable boon rarity! Marks boons that were banned by Vow of Forsaking. Disables requirements for the Offerings button in the boon selection screen."
 websiteUrl = "https://github.com/The-Black-Lodge/JowdayBoonBuddy"
 containsNsfwContent = false
