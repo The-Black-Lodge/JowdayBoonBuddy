@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+## Fixed
+- rarity fixes for 1.0
+- deprecated the banned display, as it is now native
 
 ## [0.7.0] - 2024-10-17
 

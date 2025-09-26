@@ -184,13 +184,13 @@ function public.adjustRarityValues()
     if min > 2 then rarityTable.Heroic = 1 end
 
     -- apply to regular boons
-    game.CurrentRun.Hero.BoonData.RarityChances = rarityTable
+    game.HeroData.BoonData.RarityChances = rarityTable
 
     -- apply to friends
     if hermes == true then
-        game.CurrentRun.Hero.HermesData.RarityChances = rarityTable
+        game.HeroData.HermesData.RarityChances = rarityTable
     else
-        game.CurrentRun.Hero.HermesData.RarityChances = game.ShallowCopyTable(DefaultHermesRarity)
+        game.HeroData.HermesData.RarityChances = game.ShallowCopyTable(DefaultHermesRarity)
     end
     if artemis == true then
         game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = rarityTable
@@ -214,8 +214,8 @@ function public.adjustRarityValues()
 end
 
 function revertDefaultRarity()
-    game.CurrentRun.Hero.BoonData = game.DeepCopyTable(game.HeroData.BoonData)
-    game.CurrentRun.Hero.HermesData = game.DeepCopyTable(game.HeroData.HermesData)
+    game.HeroData.BoonData = game.DeepCopyTable(game.HeroData.BoonData)
+    game.HeroData.HermesData = game.DeepCopyTable(game.HeroData.HermesData)
 end
 
 function getReplaceableIndices(options)
@@ -226,14 +226,6 @@ function getReplaceableIndices(options)
         end
     end
     return indices
-end
-
--- vow of forsaking functions
-function setBannedProps(textArgs)
-    textArgs.Color = game.Color.DarkRed
-    textArgs.ShadowBlur = 0
-    textArgs.ShadowColor = game.Color.Black
-    textArgs.ShadowOffset = { 0, 1 }
 end
 
 function isTraitBanned(traitName)
