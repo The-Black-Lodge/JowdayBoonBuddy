@@ -1,6 +1,21 @@
 ---@meta _
 ---@diagnostic disable
 
+-- Track previous values to avoid unnecessary updates
+local previousConfig = {
+    MinimumRarity = nil,
+    RareChance = nil,
+    EpicChance = nil,
+    HeroicChance = nil,
+    LegendaryChance = nil,
+    DuoChance = nil,
+    ReplaceChance = nil,
+    HermesRarity = nil,
+    ArtemisRarity = nil,
+    HadesRarity = nil,
+    ChaosRarity = nil
+}
+
 rom.gui.add_imgui(function()
     if rom.ImGui.Begin("BoonBuddy") then
         drawMenu()
@@ -19,16 +34,18 @@ function drawMenu()
     rom.ImGui.Text("Minimum boon rarity")
 
     value, pressed = rom.ImGui.RadioButton("Common##radio", config.MinimumRarity, 0)
-    if pressed then
+    if pressed and value ~= previousConfig.MinimumRarity then
         config.MinimumRarity = value
+        previousConfig.MinimumRarity = value
         adjustRarityValues()
     end
 
     rom.ImGui.SameLine()
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0, 0.54, 1, 1)
     value, pressed = rom.ImGui.RadioButton("Rare##radio", config.MinimumRarity, 1)
-    if pressed then
+    if pressed and value ~= previousConfig.MinimumRarity then
         config.MinimumRarity = value
+        previousConfig.MinimumRarity = value
         adjustRarityValues()
     end
     rom.ImGui.PopStyleColor()
@@ -36,8 +53,9 @@ function drawMenu()
     rom.ImGui.SameLine()
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.62, 0.07, 1, 1)
     value, pressed = rom.ImGui.RadioButton("Epic##radio", config.MinimumRarity, 2)
-    if pressed then
+    if pressed and value ~= previousConfig.MinimumRarity then
         config.MinimumRarity = value
+        previousConfig.MinimumRarity = value
         adjustRarityValues()
     end
     rom.ImGui.PopStyleColor()
@@ -45,8 +63,9 @@ function drawMenu()
     rom.ImGui.SameLine()
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.97, 0.38, 0.35, 1)
     value, pressed = rom.ImGui.RadioButton("Heroic##radio", config.MinimumRarity, 3)
-    if pressed then
+    if pressed and value ~= previousConfig.MinimumRarity then
         config.MinimumRarity = value
+        previousConfig.MinimumRarity = value
         adjustRarityValues()
     end
     rom.ImGui.PopStyleColor()
@@ -57,8 +76,9 @@ function drawMenu()
     if config.MinimumRarity == 0 then
         rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0, 0.54, 1, 1)
         value, selected = rom.ImGui.SliderInt("Rare", config.RareChance, 0, 100, '%d%%')
-        if selected then
+        if selected and value ~= previousConfig.RareChance then
             config.RareChance = value
+            previousConfig.RareChance = value
             adjustRarityValues()
         end
         rom.ImGui.PopStyleColor()
@@ -67,8 +87,9 @@ function drawMenu()
     if config.MinimumRarity < 2 then
         rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.62, 0.07, 1, 1)
         value, selected = rom.ImGui.SliderInt("Epic", config.EpicChance, 0, 100, '%d%%')
-        if selected then
+        if selected and value ~= previousConfig.EpicChance then
             config.EpicChance = value
+            previousConfig.EpicChance = value
             adjustRarityValues()
         end
         rom.ImGui.PopStyleColor()
@@ -77,8 +98,9 @@ function drawMenu()
     if config.MinimumRarity < 3 then
         rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.97, 0.38, 0.35, 1)
         value, selected = rom.ImGui.SliderInt("Heroic", config.HeroicChance, 0, 100, '%d%%')
-        if selected then
+        if selected and value ~= previousConfig.HeroicChance then
             config.HeroicChance = value
+            previousConfig.HeroicChance = value
             adjustRarityValues()
         end
         rom.ImGui.PopStyleColor()
@@ -86,51 +108,58 @@ function drawMenu()
 
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 1, 0.56, 0, 1)
     value, selected = rom.ImGui.SliderInt("Legendary", config.LegendaryChance, 0, 100, '%d%%')
-    if selected then
+    if selected and value ~= previousConfig.LegendaryChance then
         config.LegendaryChance = value
+        previousConfig.LegendaryChance = value
         adjustRarityValues()
     end
     rom.ImGui.PopStyleColor()
 
     rom.ImGui.PushStyleColor(rom.ImGuiCol.Text, 0.82, 1, 0.38, 1)
     value, selected = rom.ImGui.SliderInt("Duo", config.DuoChance, 0, 100, '%d%%')
-    if selected then
+    if selected and value ~= previousConfig.DuoChance then
         config.DuoChance = value
+        previousConfig.DuoChance = value
         adjustRarityValues()
     end
     rom.ImGui.PopStyleColor()
 
     value, selected = rom.ImGui.SliderInt("Sacrifice", config.ReplaceChance, 0, 100, '%d%%')
-    if selected then
+    if selected and value ~= previousConfig.ReplaceChance then
         config.ReplaceChance = value
+        previousConfig.ReplaceChance = value
         adjustRarityValues()
     end
 
     value, checked = rom.ImGui.Checkbox("Apply to Hermes",
         config.HermesRarity)
-    if checked then
+    if checked and value ~= previousConfig.HermesRarity then
         config.HermesRarity = value
+        previousConfig.HermesRarity = value
         adjustRarityValues()
     end
 
     value, checked = rom.ImGui.Checkbox("Apply to Artemis",
         config.ArtemisRarity)
-    if checked then
+    if checked and value ~= previousConfig.ArtemisRarity then
         config.ArtemisRarity = value
+        previousConfig.ArtemisRarity = value
         adjustRarityValues()
     end
 
     value, checked = rom.ImGui.Checkbox("Apply to Hades",
         config.HadesRarity)
-    if checked then
+    if checked and value ~= previousConfig.HadesRarity then
         config.HadesRarity = value
+        previousConfig.HadesRarity = value
         adjustRarityValues()
     end
 
     value, checked = rom.ImGui.Checkbox("Apply to Chaos (Max Epic)",
         config.ChaosRarity)
-    if checked then
+    if checked and value ~= previousConfig.ChaosRarity then
         config.ChaosRarity = value
+        previousConfig.ChaosRarity = value
         adjustRarityValues()
     end
 
@@ -156,6 +185,20 @@ function drawMenu()
         config.ChaosRarity = false
         config.HadesRarity = false
         config.NewSaveOverride = false
+        
+        -- Update previous config values to match reset values
+        previousConfig.MinimumRarity = config.MinimumRarity
+        previousConfig.RareChance = config.RareChance
+        previousConfig.EpicChance = config.EpicChance
+        previousConfig.HeroicChance = config.HeroicChance
+        previousConfig.LegendaryChance = config.LegendaryChance
+        previousConfig.DuoChance = config.DuoChance
+        previousConfig.ReplaceChance = config.ReplaceChance
+        previousConfig.HermesRarity = config.HermesRarity
+        previousConfig.ArtemisRarity = config.ArtemisRarity
+        previousConfig.ChaosRarity = config.ChaosRarity
+        previousConfig.HadesRarity = config.HadesRarity
+        
         adjustRarityValues()
     end
 
