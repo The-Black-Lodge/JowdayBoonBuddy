@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+## Fixed
+- attempt to streamline UI/adjustment code
 
 ## [1.0.1] - 2025-09-26
 
