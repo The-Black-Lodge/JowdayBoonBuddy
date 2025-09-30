@@ -1,5 +1,6 @@
 {
     Animations = [
+        "_append"
         {
             Name = "BoonSlotPerfect"
             InheritFrom = "BoonSlotBase"

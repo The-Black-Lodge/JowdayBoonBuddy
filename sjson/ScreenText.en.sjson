@@ -1,8 +1,10 @@
 {
-    Texts = [
-        {
-            Id = "Boon_Perfect"
-            DisplayName = "Perfect"
-        }
-    ]
+  Texts =
+  [
+    "_append"
+    {
+      Id = "Boon_Perfect"
+      DisplayName = "Perfect"
+    }
+  ]
 }
