@@ -1,85 +1,100 @@
 ---@meta _
 ---@diagnostic disable
 
--- grabbing our dependencies,
--- these funky (---@) comments are just there
---	 to help VS Code find the definitions of things
-
----@diagnostic disable-next-line: undefined-global
-local mods = rom.mods
-
----@module 'SGG_Modding-ENVY-auto'
-mods['SGG_Modding-ENVY'].auto()
--- ^ this gives us `public` and `import`, among others
---	and makes all globals we define private to this plugin.
----@diagnostic disable: lowercase-global
-
----@diagnostic disable-next-line: undefined-global
-rom = rom
----@diagnostic disable-next-line: undefined-global
-_PLUGIN = PLUGIN
-
----@module 'SGG_Modding-Hades2GameDef-Globals'
-game = rom.game
-
----@module 'SGG_Modding-ModUtil'
-modutil = mods['SGG_Modding-ModUtil']
-
----@module 'SGG_Modding-Chalk'
-chalk = mods["SGG_Modding-Chalk"]
----@module 'SGG_Modding-ReLoad'
-reload = mods['SGG_Modding-ReLoad']
-
----@module 'config'
-config = chalk.auto()
--- ^ this updates our config.toml in the config folder!
-public.config = config -- so other mods can access our config
-
-local function on_ready()
-    -- what to do when we are ready, but not re-do on reload.
-    if config.enabled == false then return end
-
-    DefaultInfusionGameStateRequirements = {}
-    DefaultInfusionActivationRequirements = {}
-    DefaultBoonRarity = {}
-    DefaultHermesRarity = {}
-    DefaultReplaceChance = 0.1
-    DefaultArtemisRarity = {}
-    DefaultArtemisRollOrder = {}
-    DefaultHadesRarity = {}
-    DefaultHadesRollOrder = {}
-    DefaultChaosRarity = {}
-    DefaultRarityOrder = {}
-    DefaultRarityReverseOrder = {}
-    DefaultRarityUpgradeOrder = {}
-
-    import 'wrap.lua'
+-- Create the global mod object if it doesn't exist
+if not JowdayBoonBuddy then
+    JowdayBoonBuddy = {}
 end
 
-local function on_reload()
-    if config.enabled == false then return end
+local mod = JowdayBoonBuddy
 
-    perfect = mods['Jowday-Perfectoinist']
+-- Initialize default game values
+mod.DefaultInfusionGameStateRequirements = {}
+mod.DefaultInfusionActivationRequirements = {}
+mod.DefaultBoonRarity = {}
+mod.DefaultHermesRarity = {}
+mod.DefaultReplaceChance = 0.1
+mod.DefaultArtemisRarity = {}
+mod.DefaultArtemisRollOrder = {}
+mod.DefaultHadesRarity = {}
+mod.DefaultHadesRollOrder = {}
+mod.DefaultChaosRarity = {}
+mod.DefaultRarityOrder = {}
+mod.DefaultRarityReverseOrder = {}
+mod.DefaultRarityUpgradeOrder = {}
 
-    import 'func.lua'
-    import 'imgui.lua'
-end
-
--- this allows us to limit certain functions to not be reloaded.
-local loader = reload.auto_single()
-
--- this runs only when modutil and the game's lua is ready
-modutil.once_loaded.game(function()
-    loader.load(on_ready, on_reload)
-end)
-
-modutil.once_loaded.save(function()
-    if config.enabled == false then return end
-
-    getDefaults()
-    adjustRarityValues()
-    updateBoonListRequirements()
-    if config.OnlyOfferInfusionWhenActivated == true then
-        overrideInfusionGameStateRequirements()
+-- UseLoot wrap for infusion boon replacement
+ModUtil.Path.Wrap("UseLoot", function(base, usee, args, user)
+    if mod.Config.InfusionOverride == true then
+        local elementalTrait, eligible, activated = mod.getEligibleElementalTrait(usee.Traits, usee.UpgradeOptions)
+        -- if we got something back, check if we should replace one of the offered boons
+        if elementalTrait ~= nil then
+            -- only roll if: apply % when activated + activated, OR apply % when activated is unchecked
+            if (mod.Config.OnlyApplyInfusionChanceWhenActivated == true and activated == true) or
+                (mod.Config.OnlyApplyInfusionChanceWhenActivated == false and eligible == true)
+            then
+                -- check if we have replaceable traits, and get their indices
+                local replaceableIndices = mod.getReplaceableIndices(usee.UpgradeOptions)
+                if #replaceableIndices > 0 then
+                    -- set a seed because the in-game rng is weird
+                    math.randomseed(GetTime())
+                    local random = math.random(100)
+                    -- roll the dice
+                    if mod.Config.InfusionChance > random then
+                        -- get a random index in the table
+                        local replaceIndex = replaceableIndices[math.random(#replaceableIndices)]
+                        -- finally replace the thing
+                        usee.UpgradeOptions[replaceIndex] = {
+                            ItemName = elementalTrait,
+                            Type = "Trait",
+                            Rarity = "Common"
+                        }
+                    end
+                end
+            end
+        end
     end
+    return base(usee, args, user)
 end)
+
+-- GetBoonRarityChances wrap for rarity modifications
+ModUtil.Path.Wrap("GetBoonRarityChances", function(base, args)
+    if mod.Config.enabled == false then return base(args) end
+    
+    local result = base(args)
+    
+    -- Apply rarity modifications
+    if mod.Config.AlwaysAllowed == true then
+        result.MinimumRarity = mod.Config.MinimumRarity
+    end
+    
+    if mod.Config.RareChance ~= nil then
+        result.RareChance = mod.Config.RareChance
+    end
+    if mod.Config.EpicChance ~= nil then
+        result.EpicChance = mod.Config.EpicChance
+    end
+    if mod.Config.HeroicChance ~= nil then
+        result.HeroicChance = mod.Config.HeroicChance
+    end
+    if mod.Config.LegendaryChance ~= nil then
+        result.LegendaryChance = mod.Config.LegendaryChance
+    end
+    if mod.Config.DuoChance ~= nil then
+        result.DuoChance = mod.Config.DuoChance
+    end
+    
+    return result
+end)
+
+-- Run on game load
+OnAnyLoad { function()
+    if mod.Config.enabled then
+        mod.getDefaults()
+        mod.adjustRarityValues()
+        mod.updateBoonListRequirements()
+        if mod.Config.OnlyOfferInfusionWhenActivated == true then
+            mod.overrideInfusionGameStateRequirements()
+        end
+    end
+end }

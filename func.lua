@@ -1,57 +1,63 @@
 ---@meta _
 ---@diagnostic disable
 
-function getDefaults()
-    for traitName, vals in pairs(game.TraitData) do
-        if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
-            DefaultInfusionGameStateRequirements[traitName] = game.DeepCopyTable(vals.GameStateRequirements)
-        end
-    end
-
-    for traitName, vals in pairs(game.TraitData) do
-        if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
-            DefaultInfusionActivationRequirements[traitName] = game.DeepCopyTable(vals.ActivationRequirements)
-        end
-    end
-
-    DefaultBoonRarity = game.ShallowCopyTable(game.HeroData.BoonData.RarityChances)
-    DefaultHermesRarity = game.ShallowCopyTable(game.HeroData.HermesData.RarityChances)
-    DefaultReplaceChance = game.HeroData.BoonData.ReplaceChance
-    DefaultArtemisRarity = game.ShallowCopyTable(game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances)
-    DefaultArtemisRollOrder = game.ShallowCopyTable(game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder)
-    DefaultHadesRarity = game.ShallowCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances)
-    DefaultHadesRollOrder = game.ShallowCopyTable(game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder)
-    DefaultChaosRarity = game.ShallowCopyTable(game.LootSetData.Chaos.TrialUpgrade.BoonRaritiesOverride)
-    DefaultRarityOrder = game.ShallowCopyTable(game.TraitRarityData.BoonRarityRollOrder)
-    DefaultRarityReverseOrder = game.ShallowCopyTable(game.TraitRarityData.BoonRarityReverseRollOrder)
-    DefaultRarityUpgradeOrder = game.ShallowCopyTable(game.TraitRarityData.RarityUpgradeOrder)
+-- Create the global mod object if it doesn't exist
+if not JowdayBoonBuddy then
+    JowdayBoonBuddy = {}
 end
 
-function overrideInfusionGameStateRequirements()
-    for traitName, vals in pairs(game.TraitData) do
+local mod = JowdayBoonBuddy
+
+function mod.getDefaults()
+    for traitName, vals in pairs(TraitData) do
         if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
-            game.TraitData[traitName].GameStateRequirements = game.DeepCopyTable(vals.ActivationRequirements)
+            mod.DefaultInfusionGameStateRequirements[traitName] = DeepCopyTable(vals.GameStateRequirements)
+        end
+    end
+
+    for traitName, vals in pairs(TraitData) do
+        if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
+            mod.DefaultInfusionActivationRequirements[traitName] = DeepCopyTable(vals.ActivationRequirements)
+        end
+    end
+
+    mod.DefaultBoonRarity = ShallowCopyTable(HeroData.BoonData.RarityChances)
+    mod.DefaultHermesRarity = ShallowCopyTable(HeroData.HermesData.RarityChances)
+    mod.DefaultReplaceChance = HeroData.BoonData.ReplaceChance
+    mod.DefaultArtemisRarity = ShallowCopyTable(UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances)
+    mod.DefaultArtemisRollOrder = ShallowCopyTable(UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder)
+    mod.DefaultHadesRarity = ShallowCopyTable(UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances)
+    mod.DefaultHadesRollOrder = ShallowCopyTable(UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder)
+    mod.DefaultChaosRarity = ShallowCopyTable(LootSetData.Chaos.TrialUpgrade.BoonRaritiesOverride)
+    mod.DefaultRarityOrder = ShallowCopyTable(TraitRarityData.BoonRarityRollOrder)
+    mod.DefaultRarityReverseOrder = ShallowCopyTable(TraitRarityData.BoonRarityReverseRollOrder)
+    mod.DefaultRarityUpgradeOrder = ShallowCopyTable(TraitRarityData.RarityUpgradeOrder)
+end
+
+function mod.overrideInfusionGameStateRequirements()
+    for traitName, vals in pairs(TraitData) do
+        if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
+            TraitData[traitName].GameStateRequirements = DeepCopyTable(vals.ActivationRequirements)
         end
     end
 end
 
-function revertInfusionGameStateRequirements()
-    for traitName, vals in pairs(game.TraitData) do
+function mod.revertInfusionGameStateRequirements()
+    for traitName, vals in pairs(TraitData) do
         if vals.IsElementalTrait and vals.ActivationRequirements ~= nil then
-            game.TraitData[traitName].GameStateRequirements = game.DeepCopyTable(DefaultInfusionGameStateRequirements
-                [traitName])
+            TraitData[traitName].GameStateRequirements = DeepCopyTable(mod.DefaultInfusionGameStateRequirements[traitName])
         end
     end
 end
 
-function getEligibleElementalTrait(traits, options)
+function mod.getEligibleElementalTrait(traits, options)
     -- pretty sure options can never be nil, but just in case
     if traits == nil or options == nil then return nil end
 
     -- check for an elemental trait
     local elementalTrait = nil
     for _, traitName in ipairs(traits) do
-        if game.TraitData[traitName].IsElementalTrait then
+        if TraitData[traitName].IsElementalTrait then
             elementalTrait = traitName
         end
     end
@@ -60,17 +66,17 @@ function getEligibleElementalTrait(traits, options)
     if elementalTrait == nil then return nil end
 
     -- check if we have it already
-    if game.HeroHasTrait(elementalTrait) then return nil end
+    if HeroHasTrait(elementalTrait) then return nil end
 
     -- check if it was banned
-    if isTraitBanned(elementalTrait) then return nil end
+    if mod.isTraitBanned(elementalTrait) then return nil end
 
     -- check for elemental requirement
-    local activationReqs = game.DeepCopyTable(DefaultInfusionActivationRequirements[elementalTrait])
-    local activated = game.IsGameStateEligible(game.CurrentRun, activationReqs)
+    local activationReqs = DeepCopyTable(mod.DefaultInfusionActivationRequirements[elementalTrait])
+    local activated = IsGameStateEligible(CurrentRun, activationReqs)
 
-    local requirements = game.TraitData[elementalTrait].GameStateRequirements
-    local eligible = game.IsGameStateEligible(game.CurrentRun, requirements)
+    local requirements = TraitData[elementalTrait].GameStateRequirements
+    local eligible = IsGameStateEligible(CurrentRun, requirements)
     if eligible == false then
         return nil
     end
@@ -85,54 +91,50 @@ function getEligibleElementalTrait(traits, options)
     return elementalTrait, eligible, activated
 end
 
-function public.adjustRarityValues()
-    -- load up perfectoinist
-    local mods = rom.mods
-    local perfectMod = mods['Jowday-Perfectoinist']
-
+function mod.adjustRarityValues()
     -- make sure everything is a number
     local min, rare, epic, heroic, duo, legendary, replace
-    if type(config.MinimumRarity) == 'number' then
-        min = config.MinimumRarity
+    if type(mod.Config.MinimumRarity) == 'number' then
+        min = mod.Config.MinimumRarity
     else
         min = 0
     end
-    if type(config.RareChance) == 'number' then
-        rare = math.min(config.RareChance / 100, 1)
+    if type(mod.Config.RareChance) == 'number' then
+        rare = math.min(mod.Config.RareChance / 100, 1)
     else
-        rare = DefaultBoonRarity.Rare * 100
+        rare = mod.DefaultBoonRarity.Rare * 100
     end
-    if type(config.EpicChance) == 'number' then
-        epic = math.min(config.EpicChance / 100, 1)
+    if type(mod.Config.EpicChance) == 'number' then
+        epic = math.min(mod.Config.EpicChance / 100, 1)
     else
-        epic = DefaultBoonRarity.Epic * 100
+        epic = mod.DefaultBoonRarity.Epic * 100
     end
-    if type(config.HeroicChance) == 'number' then
-        heroic = math.min(config.HeroicChance / 100, 1)
+    if type(mod.Config.HeroicChance) == 'number' then
+        heroic = math.min(mod.Config.HeroicChance / 100, 1)
     else
         heroic = 0
     end
-    if type(config.DuoChance) == 'number' then
-        duo = math.min(config.DuoChance / 100, 1)
+    if type(mod.Config.DuoChance) == 'number' then
+        duo = math.min(mod.Config.DuoChance / 100, 1)
     else
-        duo = DefaultBoonRarity.Duo * 100
+        duo = mod.DefaultBoonRarity.Duo * 100
     end
-    if type(config.LegendaryChance) == 'number' then
-        legendary = math.min(config.LegendaryChance / 100, 1)
+    if type(mod.Config.LegendaryChance) == 'number' then
+        legendary = math.min(mod.Config.LegendaryChance / 100, 1)
     else
-        legendary = DefaultBoonRarity.Legendary * 100
+        legendary = mod.DefaultBoonRarity.Legendary * 100
     end
-    if type(config.ReplaceChance) == 'number' then
-        replace = math.min(config.ReplaceChance / 100, 1)
+    if type(mod.Config.ReplaceChance) == 'number' then
+        replace = math.min(mod.Config.ReplaceChance / 100, 1)
     else
-        replace = DefaultReplaceChance * 100
+        replace = mod.DefaultReplaceChance * 100
     end
 
     -- apply MinimumRarity overrides
-    local hermes = config.HermesRarity
-    local artemis = config.ArtemisRarity
-    local hades = config.HadesRarity
-    local chaos = config.ChaosRarity
+    local hermes = mod.Config.HermesRarity
+    local artemis = mod.Config.ArtemisRarity
+    local hades = mod.Config.HadesRarity
+    local chaos = mod.Config.ChaosRarity
 
     local rarityTable = {}
 
@@ -144,39 +146,21 @@ function public.adjustRarityValues()
     rarityTable.Legendary = legendary
 
     -- adds Heroic to the rolls
-    local rarityOrder = game.ShallowCopyTable(DefaultRarityOrder)
+    local rarityOrder = ShallowCopyTable(mod.DefaultRarityOrder)
     if heroic > 0 or min > 2 then rarityOrder = { "Common", "Rare", "Epic", "Heroic", "Duo", "Legendary" } end
 
-    local reverseOrder = game.ShallowCopyTable(DefaultRarityReverseOrder)
+    local reverseOrder = ShallowCopyTable(mod.DefaultRarityReverseOrder)
     if heroic > 0 or min > 2 then reverseOrder = { "Legendary", "Duo", "Heroic", "Epic", "Rare", "Common" } end
 
-    local upgradeOrder = game.ShallowCopyTable(DefaultRarityUpgradeOrder)
-
-    -- perfectoinist plugin
-    if perfectMod then
-        local perfect
-        if type(perfectMod.config.PerfectChance) == 'number' then
-            perfect = math.min(perfectMod.config.PerfectChance / 100, 1)
-        else
-            perfect = perfectMod.DefaultPerfectChance
-        end
-        rarityTable.Perfect = perfect
-        if perfect > 0 then
-            table.insert(rarityOrder, "Perfect")
-            table.insert(reverseOrder, 1, "Perfect")
-        end
-        if perfectMod.config.AllowPerfectSacrifice then
-            table.insert(upgradeOrder, "Perfect")
-        end
-    end
+    local upgradeOrder = ShallowCopyTable(mod.DefaultRarityUpgradeOrder)
 
     -- apply roll order after plugins/etc
-    game.TraitRarityData.BoonRarityRollOrder = rarityOrder
-    game.TraitRarityData.BoonRarityReverseRollOrder = reverseOrder
-    game.TraitRarityData.RarityUpgradeOrder = upgradeOrder
-    game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = rarityOrder
+    TraitRarityData.BoonRarityRollOrder = rarityOrder
+    TraitRarityData.BoonRarityReverseRollOrder = reverseOrder
+    TraitRarityData.RarityUpgradeOrder = upgradeOrder
+    UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = rarityOrder
     -- this seems to be ignored currently, but putting it here anyway
-    game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = rarityOrder
+    UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = rarityOrder
 
     -- apply overrides
     if min > 0 then rarityTable.Rare = 1 end
@@ -184,41 +168,40 @@ function public.adjustRarityValues()
     if min > 2 then rarityTable.Heroic = 1 end
 
     -- apply to regular boons
-    game.HeroData.BoonData.RarityChances = rarityTable
+    HeroData.BoonData.RarityChances = rarityTable
 
     -- apply to friends
     if hermes == true then
-        game.HeroData.HermesData.RarityChances = rarityTable
+        HeroData.HermesData.RarityChances = rarityTable
     else
-        game.HeroData.HermesData.RarityChances = game.ShallowCopyTable(DefaultHermesRarity)
+        HeroData.HermesData.RarityChances = ShallowCopyTable(mod.DefaultHermesRarity)
     end
     if artemis == true then
-        game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = rarityTable
+        UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = rarityTable
     else
-        game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = game.ShallowCopyTable(DefaultArtemisRarity)
-        game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = game.ShallowCopyTable(
-        DefaultArtemisRollOrder)
+        UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityChances = ShallowCopyTable(mod.DefaultArtemisRarity)
+        UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = ShallowCopyTable(mod.DefaultArtemisRollOrder)
     end
     -- this doesn't do anything currently - see the GetRarityChances wrap
     if hades == true then
-        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = rarityTable
+        UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = rarityTable
     else
-        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = game.ShallowCopyTable(DefaultHadesRarity)
-        game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = game.ShallowCopyTable(DefaultHadesRollOrder)
+        UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityChances = ShallowCopyTable(mod.DefaultHadesRarity)
+        UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = ShallowCopyTable(mod.DefaultHadesRollOrder)
     end
     if chaos == true then
-        game.LootSetData.Chaos.TrialUpgrade.BoonRaritiesOverride = rarityTable
+        LootSetData.Chaos.TrialUpgrade.BoonRaritiesOverride = rarityTable
     else
-        game.LootSetData.Chaos.TrialUpgrade.BoonRaritiesOverride = game.ShallowCopyTable(DefaultChaosRarity)
+        LootSetData.Chaos.TrialUpgrade.BoonRaritiesOverride = ShallowCopyTable(mod.DefaultChaosRarity)
     end
 end
 
-function revertDefaultRarity()
-    game.HeroData.BoonData = game.DeepCopyTable(game.HeroData.BoonData)
-    game.HeroData.HermesData = game.DeepCopyTable(game.HeroData.HermesData)
+function mod.revertDefaultRarity()
+    HeroData.BoonData = DeepCopyTable(HeroData.BoonData)
+    HeroData.HermesData = DeepCopyTable(HeroData.HermesData)
 end
 
-function getReplaceableIndices(options)
+function mod.getReplaceableIndices(options)
     local indices = {}
     for i, option in ipairs(options) do
         if option.Rarity ~= "Duo" and option.Rarity ~= "Legendary" then
@@ -228,17 +211,17 @@ function getReplaceableIndices(options)
     return indices
 end
 
-function isTraitBanned(traitName)
-    if game.CurrentRun.BannedTraits[traitName] then return true end
+function mod.isTraitBanned(traitName)
+    if CurrentRun.BannedTraits[traitName] then return true end
     return false
 end
 
 -- offerings button override functions
 -- UpgradeChoiceData:340
-function updateBoonListRequirements()
-    if config.AlwaysAllowed == true then
-        game.ScreenData.UpgradeChoice.ComponentData.ActionBarLeft.Children.BoonListButton["Requirements"] = {}
+function mod.updateBoonListRequirements()
+    if mod.Config.AlwaysAllowed == true then
+        ScreenData.UpgradeChoice.ComponentData.ActionBarLeft.Children.BoonListButton["Requirements"] = {}
     else
-        game.ScreenData.UpgradeChoice.ComponentData.ActionBarLeft.Children.BoonListButton["Requirements"] = { { PathTrue = { "GameState", "WorldUpgrades", "WorldUpgradeBoonList" } } }
+        ScreenData.UpgradeChoice.ComponentData.ActionBarLeft.Children.BoonListButton["Requirements"] = { { PathTrue = { "GameState", "WorldUpgrades", "WorldUpgradeBoonList" } } }
     end
 end

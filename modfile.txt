@@ -1,0 +1,6 @@
+:: Jowday's Boon Buddy
+
+To "Scripts/RoomLogic.lua"
+Import "main.lua"
+Import "config.lua"
+Import "func.lua"
