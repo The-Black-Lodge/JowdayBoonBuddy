@@ -1,0 +1,8 @@
+{
+    Texts = [
+        {
+            Id = "Boon_Perfect"
+            DisplayName = "Perfect"
+        }
+    ]
+}

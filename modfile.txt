@@ -1,5 +1,11 @@
 :: Jowday's Boon Buddy
 
+To "Game/Animations/GUI_Screens_VFX.sjson"
+SJSON "sjson/GUI_Screens_VFX.sjson"
+
+To "Game/Text/en/ScreenText.en.sjson"
+SJSON "sjson/ScreenText.en.sjson"
+
 To "Scripts/RoomLogic.lua"
 Import "main.lua"
 Import "config.lua"

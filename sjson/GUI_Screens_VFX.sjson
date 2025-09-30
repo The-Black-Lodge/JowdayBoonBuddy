@@ -1,0 +1,9 @@
+{
+    Animations = [
+        {
+            Name = "BoonSlotPerfect"
+            InheritFrom = "BoonSlotBase"
+            FilePath = "GUI\Screens\BoonSelect\BoonSlot_Duo"
+        }
+    ]
+}
