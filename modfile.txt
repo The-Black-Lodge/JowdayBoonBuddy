@@ -7,6 +7,6 @@ To "Game/Text/en/ScreenText.en.sjson"
 SJSON "sjson/ScreenText.en.sjson"
 
 To "Scripts/RoomLogic.lua"
-Import "main.lua"
 Import "config.lua"
 Import "func.lua"
+Import "main.lua"

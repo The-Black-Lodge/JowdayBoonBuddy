@@ -25,7 +25,9 @@ local config = {
     NewSaveOverride = false,
     ArtemisRarity = true,
     HadesRarity = true,
-    ChaosRarity = true
+    ChaosRarity = true,
+    PerfectChance = 75,
+    AllowPerfectSacrifice = true
 }
 
 local configDesc = {
@@ -46,7 +48,9 @@ local configDesc = {
     NewSaveOverride = "Removes the forced Common rarity from new saves. Default: false",
     ArtemisRarity = "Apply rarity chances to Artemis boons. Default: false",
     HadesRarity = "Apply rarity chances to Hades boons. Default: false",
-    ChaosRarity = "Apply rarity chances to Chaos boons. Default: false"
+    ChaosRarity = "Apply rarity chances to Chaos boons. Default: false",
+    PerfectChance = "% Chance of Perfect boon. Default: 2",
+    AllowPerfectSacrifice = "Allows Heroic boons to upgrade to Perfect during Sacrifice. Default: true"
 }
 
 JowdayBoonBuddy.Config = config

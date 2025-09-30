@@ -154,6 +154,22 @@ function mod.adjustRarityValues()
 
     local upgradeOrder = ShallowCopyTable(mod.DefaultRarityUpgradeOrder)
 
+    -- Perfectoinist plugin
+    local perfect
+    if type(mod.Config.PerfectChance) == 'number' then
+        perfect = math.min(mod.Config.PerfectChance / 100, 1)
+    else
+        perfect = mod.DefaultPerfectChance
+    end
+    rarityTable.Perfect = perfect
+    if perfect > 0 then
+        table.insert(rarityOrder, "Perfect")
+        table.insert(reverseOrder, 1, "Perfect")
+    end
+    if mod.Config.AllowPerfectSacrifice then
+        table.insert(upgradeOrder, "Perfect")
+    end
+
     -- apply roll order after plugins/etc
     TraitRarityData.BoonRarityRollOrder = rarityOrder
     TraitRarityData.BoonRarityReverseRollOrder = reverseOrder
