@@ -53,6 +53,8 @@ local function on_ready()
     DefaultRarityReverseOrder = {}
     DefaultRarityUpgradeOrder = {}
 
+    public.BoonRarityUpgradeOrder = { "Common", "Rare", "Epic", "Heroic" }
+
     import 'wrap.lua'
 end
 
