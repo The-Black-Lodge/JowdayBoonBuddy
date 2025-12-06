@@ -171,7 +171,7 @@ function public.adjustRarityValues()
         end
     end
 
-    public.BoonRarityOrder = rarityOrder
+    public.BoonRarityUpgradeOrder = upgradeOrder
 
     -- apply roll order after plugins/etc
     game.TraitRarityData.BoonRarityRollOrder = rarityOrder
