@@ -150,7 +150,8 @@ function public.adjustRarityValues()
     local reverseOrder = game.ShallowCopyTable(DefaultRarityReverseOrder)
     if heroic > 0 or min > 2 then reverseOrder = { "Legendary", "Duo", "Heroic", "Epic", "Rare", "Common" } end
 
-    local upgradeOrder = game.ShallowCopyTable(DefaultRarityUpgradeOrder)
+    -- we can't trust that the order has not been adulterated
+    local upgradeOrder = { "Common", "Rare", "Epic", "Heroic" } -- game.ShallowCopyTable(DefaultRarityUpgradeOrder)
 
     -- perfectoinist plugin
     if perfectMod then
@@ -169,6 +170,8 @@ function public.adjustRarityValues()
             table.insert(upgradeOrder, "Perfect")
         end
     end
+
+    public.BoonRarityOrder = rarityOrder
 
     -- apply roll order after plugins/etc
     game.TraitRarityData.BoonRarityRollOrder = rarityOrder
