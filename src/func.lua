@@ -176,7 +176,7 @@ function public.adjustRarityValues()
     -- apply roll order after plugins/etc
     game.TraitRarityData.BoonRarityRollOrder = rarityOrder
     game.TraitRarityData.BoonRarityReverseRollOrder = reverseOrder
-    game.TraitRarityData.RarityUpgradeOrder = upgradeOrder
+    --game.TraitRarityData.RarityUpgradeOrder = upgradeOrder
     game.UnitSetData.NPC_Artemis.NPC_Artemis_Field_01.RarityRollOrder = rarityOrder
     -- this seems to be ignored currently, but putting it here anyway
     game.UnitSetData.NPC_Hades.NPC_Hades_Field_01.RarityRollOrder = rarityOrder
